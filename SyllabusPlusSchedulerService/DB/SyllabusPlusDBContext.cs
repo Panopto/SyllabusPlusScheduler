@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScheduleRecordingServices
+namespace SyllabusPlusSchedulerService.DB
 {
-    internal class PanoptoDBContext : DbContext
+    internal class SyllabusPlusDBContext : DbContext
     {
         public DbSet<Schedule> Schedules { get; set; }
     }

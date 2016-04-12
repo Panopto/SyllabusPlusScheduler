@@ -4,9 +4,11 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
-using ScheduleRecordingServices.RemoteRecorderManagement;
+using SyllabusPlusSchedulerService.DB;
+using SyllabusPlusSchedulerService.RemoteRecorderManagement;
+using SyllabusPlusSchedulerService.Utility;
 
-namespace ScheduleRecordingServices
+namespace SyllabusPlusSchedulerService.PublicAPIWrapper
 {
     internal class RemoteRecorderManagementWrapper : IDisposable
     {

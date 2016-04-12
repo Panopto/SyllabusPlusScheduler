@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScheduleRecordingServices
+namespace SyllabusPlusSchedulerService.Utility
 {
     internal class ConfigSettings
     {

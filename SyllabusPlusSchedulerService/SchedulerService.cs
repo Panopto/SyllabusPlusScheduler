@@ -8,16 +8,20 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using ScheduleRecordingServices.RemoteRecorderManagement;
+using SyllabusPlusSchedulerService.RemoteRecorderManagement;
+using SyllabusPlusSchedulerService.Log;
+using SyllabusPlusSchedulerService.PublicAPIWrapper;
+using SyllabusPlusSchedulerService.DB;
+using SyllabusPlusSchedulerService.Utility;
 
-namespace ScheduleRecordingServices
+namespace SyllabusPlusSchedulerService
 {
-    internal partial class ScheduleRecordingService : ServiceBase
+    internal partial class SchedulerService : ServiceBase
     {
         private static readonly EventLogger log = new EventLogger();
         private Timer Scheduler;
 
-        public ScheduleRecordingService()
+        public SchedulerService()
         {
             InitializeComponent();
         }
@@ -74,7 +78,7 @@ namespace ScheduleRecordingServices
                 using (RemoteRecorderManagementWrapper remoteRecorderManagementWrapper
                     = new RemoteRecorderManagementWrapper(configSettings))
                 {
-                    using (PanoptoDBContext db = new PanoptoDBContext())
+                    using (SyllabusPlusDBContext db = new SyllabusPlusDBContext())
                     {
                         // BUGBUG: 37305 Determine if panopyoSyncSuccess = false should be considered for reschedule
                         List<Schedule> schedules =

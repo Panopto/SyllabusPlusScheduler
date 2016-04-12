@@ -1,6 +1,6 @@
-﻿namespace ScheduleRecordingServices
+﻿namespace SyllabusPlusSchedulerService
 {
-    partial class ScheduleRecordingService
+    partial class SchedulerService
     {
         /// <summary> 
         /// Required designer variable.

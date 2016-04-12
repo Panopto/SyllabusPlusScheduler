@@ -5,7 +5,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScheduleRecordingServices
+namespace SyllabusPlusSchedulerService
 {
     static class Program
     {
@@ -17,13 +17,13 @@ namespace ScheduleRecordingServices
 
             // Make sure when releasing the exe and msi, to build using "Release"
 #if DEBUG
-            ScheduleRecordingService scheduleRecordingService = new ScheduleRecordingService();
-            scheduleRecordingService.OnDebug();
+            SchedulerService schedulerService = new SchedulerService();
+            schedulerService.OnDebug();
 #else
             ServiceBase[] servicesToRun;
             servicesToRun = new ServiceBase[] 
             { 
-                new ScheduleRecordingService() 
+                new SchedulerService() 
             };
             ServiceBase.Run(servicesToRun);
 #endif

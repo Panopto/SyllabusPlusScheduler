@@ -1,4 +1,4 @@
-﻿namespace ScheduleRecordingServices
+﻿namespace SyllabusPlusSchedulerService
 {
     partial class ProjectInstaller
     {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ScheduleRecordingServices.RemoteRecorderManagement {
+namespace SyllabusPlusSchedulerService.RemoteRecorderManagement {
     using System.Runtime.Serialization;
     using System;
     
@@ -101,7 +101,7 @@ namespace ScheduleRecordingServices.RemoteRecorderManagement {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorderDevice[] DevicesField;
+        private SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorderDevice[] DevicesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ExternalIdField;
@@ -125,7 +125,7 @@ namespace ScheduleRecordingServices.RemoteRecorderManagement {
         private string SettingsUrlField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorderState StateField;
+        private SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorderState StateField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -138,7 +138,7 @@ namespace ScheduleRecordingServices.RemoteRecorderManagement {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorderDevice[] Devices {
+        public SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorderDevice[] Devices {
             get {
                 return this.DevicesField;
             }
@@ -242,7 +242,7 @@ namespace ScheduleRecordingServices.RemoteRecorderManagement {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorderState State {
+        public SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorderState State {
             get {
                 return this.StateField;
             }
@@ -274,7 +274,7 @@ namespace ScheduleRecordingServices.RemoteRecorderManagement {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorderDeviceType DeviceTypeField;
+        private SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorderDeviceType DeviceTypeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsCapturingField;
@@ -293,7 +293,7 @@ namespace ScheduleRecordingServices.RemoteRecorderManagement {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorderDeviceType DeviceType {
+        public SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorderDeviceType DeviceType {
             get {
                 return this.DeviceTypeField;
             }
@@ -476,7 +476,7 @@ namespace ScheduleRecordingServices.RemoteRecorderManagement {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorder[] PagedResultsField;
+        private SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorder[] PagedResultsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int TotalResultCountField;
@@ -492,7 +492,7 @@ namespace ScheduleRecordingServices.RemoteRecorderManagement {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorder[] PagedResults {
+        public SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorder[] PagedResults {
             get {
                 return this.PagedResultsField;
             }
@@ -615,7 +615,7 @@ namespace ScheduleRecordingServices.RemoteRecorderManagement {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingInfo[] ConflictingSessionsField;
+        private SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingInfo[] ConflictingSessionsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool ConflictsExistField;
@@ -634,7 +634,7 @@ namespace ScheduleRecordingServices.RemoteRecorderManagement {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingInfo[] ConflictingSessions {
+        public SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingInfo[] ConflictingSessions {
             get {
                 return this.ConflictingSessionsField;
             }
@@ -781,59 +781,59 @@ namespace ScheduleRecordingServices.RemoteRecorderManagement {
     public interface IRemoteRecorderManagement {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/GetRemoteRecordersById", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/GetRemoteRecordersByIdResponse")]
-        ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorder[] GetRemoteRecordersById(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid[] remoteRecorderIds);
+        SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorder[] GetRemoteRecordersById(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid[] remoteRecorderIds);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/GetRemoteRecordersById", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/GetRemoteRecordersByIdResponse")]
-        System.Threading.Tasks.Task<ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorder[]> GetRemoteRecordersByIdAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid[] remoteRecorderIds);
+        System.Threading.Tasks.Task<SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorder[]> GetRemoteRecordersByIdAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid[] remoteRecorderIds);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/GetRemoteRecordersByExternalId", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/GetRemoteRecordersByExternalIdRespon" +
             "se")]
-        ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorder[] GetRemoteRecordersByExternalId(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, string[] externalIds);
+        SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorder[] GetRemoteRecordersByExternalId(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, string[] externalIds);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/GetRemoteRecordersByExternalId", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/GetRemoteRecordersByExternalIdRespon" +
             "se")]
-        System.Threading.Tasks.Task<ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorder[]> GetRemoteRecordersByExternalIdAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, string[] externalIds);
+        System.Threading.Tasks.Task<SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorder[]> GetRemoteRecordersByExternalIdAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, string[] externalIds);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/UpdateRemoteRecorderExternalId", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/UpdateRemoteRecorderExternalIdRespon" +
             "se")]
-        void UpdateRemoteRecorderExternalId(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid remoteRecorderId, string externalId);
+        void UpdateRemoteRecorderExternalId(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid remoteRecorderId, string externalId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/UpdateRemoteRecorderExternalId", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/UpdateRemoteRecorderExternalIdRespon" +
             "se")]
-        System.Threading.Tasks.Task UpdateRemoteRecorderExternalIdAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid remoteRecorderId, string externalId);
+        System.Threading.Tasks.Task UpdateRemoteRecorderExternalIdAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid remoteRecorderId, string externalId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/ListRecorders", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/ListRecordersResponse")]
-        ScheduleRecordingServices.RemoteRecorderManagement.ListRecordersResponse ListRecorders(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, ScheduleRecordingServices.RemoteRecorderManagement.Pagination pagination, ScheduleRecordingServices.RemoteRecorderManagement.RecorderSortField sortBy);
+        SyllabusPlusSchedulerService.RemoteRecorderManagement.ListRecordersResponse ListRecorders(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, SyllabusPlusSchedulerService.RemoteRecorderManagement.Pagination pagination, SyllabusPlusSchedulerService.RemoteRecorderManagement.RecorderSortField sortBy);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/ListRecorders", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/ListRecordersResponse")]
-        System.Threading.Tasks.Task<ScheduleRecordingServices.RemoteRecorderManagement.ListRecordersResponse> ListRecordersAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, ScheduleRecordingServices.RemoteRecorderManagement.Pagination pagination, ScheduleRecordingServices.RemoteRecorderManagement.RecorderSortField sortBy);
+        System.Threading.Tasks.Task<SyllabusPlusSchedulerService.RemoteRecorderManagement.ListRecordersResponse> ListRecordersAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, SyllabusPlusSchedulerService.RemoteRecorderManagement.Pagination pagination, SyllabusPlusSchedulerService.RemoteRecorderManagement.RecorderSortField sortBy);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/ScheduleRecording", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/ScheduleRecordingResponse")]
-        ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingResult ScheduleRecording(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, string name, System.Guid folderId, bool isBroadcast, System.DateTime start, System.DateTime end, ScheduleRecordingServices.RemoteRecorderManagement.RecorderSettings[] recorderSettings);
+        SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingResult ScheduleRecording(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, string name, System.Guid folderId, bool isBroadcast, System.DateTime start, System.DateTime end, SyllabusPlusSchedulerService.RemoteRecorderManagement.RecorderSettings[] recorderSettings);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/ScheduleRecording", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/ScheduleRecordingResponse")]
-        System.Threading.Tasks.Task<ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingResult> ScheduleRecordingAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, string name, System.Guid folderId, bool isBroadcast, System.DateTime start, System.DateTime end, ScheduleRecordingServices.RemoteRecorderManagement.RecorderSettings[] recorderSettings);
+        System.Threading.Tasks.Task<SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingResult> ScheduleRecordingAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, string name, System.Guid folderId, bool isBroadcast, System.DateTime start, System.DateTime end, SyllabusPlusSchedulerService.RemoteRecorderManagement.RecorderSettings[] recorderSettings);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/ScheduleRecurringRecording", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/ScheduleRecurringRecordingResponse")]
-        ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingResult ScheduleRecurringRecording(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid scheduledSessionId, System.DayOfWeek[] daysOfWeek, System.DateTime end);
+        SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingResult ScheduleRecurringRecording(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid scheduledSessionId, System.DayOfWeek[] daysOfWeek, System.DateTime end);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/ScheduleRecurringRecording", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/ScheduleRecurringRecordingResponse")]
-        System.Threading.Tasks.Task<ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingResult> ScheduleRecurringRecordingAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid scheduledSessionId, System.DayOfWeek[] daysOfWeek, System.DateTime end);
+        System.Threading.Tasks.Task<SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingResult> ScheduleRecurringRecordingAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid scheduledSessionId, System.DayOfWeek[] daysOfWeek, System.DateTime end);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/UpdateRecordingTime", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/UpdateRecordingTimeResponse")]
-        ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingResult UpdateRecordingTime(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid sessionId, System.DateTime start, System.DateTime end);
+        SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingResult UpdateRecordingTime(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid sessionId, System.DateTime start, System.DateTime end);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRemoteRecorderManagement/UpdateRecordingTime", ReplyAction="http://tempuri.org/IRemoteRecorderManagement/UpdateRecordingTimeResponse")]
-        System.Threading.Tasks.Task<ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingResult> UpdateRecordingTimeAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid sessionId, System.DateTime start, System.DateTime end);
+        System.Threading.Tasks.Task<SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingResult> UpdateRecordingTimeAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid sessionId, System.DateTime start, System.DateTime end);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IRemoteRecorderManagementChannel : ScheduleRecordingServices.RemoteRecorderManagement.IRemoteRecorderManagement, System.ServiceModel.IClientChannel {
+    public interface IRemoteRecorderManagementChannel : SyllabusPlusSchedulerService.RemoteRecorderManagement.IRemoteRecorderManagement, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class RemoteRecorderManagementClient : System.ServiceModel.ClientBase<ScheduleRecordingServices.RemoteRecorderManagement.IRemoteRecorderManagement>, ScheduleRecordingServices.RemoteRecorderManagement.IRemoteRecorderManagement {
+    public partial class RemoteRecorderManagementClient : System.ServiceModel.ClientBase<SyllabusPlusSchedulerService.RemoteRecorderManagement.IRemoteRecorderManagement>, SyllabusPlusSchedulerService.RemoteRecorderManagement.IRemoteRecorderManagement {
         
         public RemoteRecorderManagementClient() {
         }
@@ -854,59 +854,59 @@ namespace ScheduleRecordingServices.RemoteRecorderManagement {
                 base(binding, remoteAddress) {
         }
         
-        public ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorder[] GetRemoteRecordersById(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid[] remoteRecorderIds) {
+        public SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorder[] GetRemoteRecordersById(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid[] remoteRecorderIds) {
             return base.Channel.GetRemoteRecordersById(auth, remoteRecorderIds);
         }
         
-        public System.Threading.Tasks.Task<ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorder[]> GetRemoteRecordersByIdAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid[] remoteRecorderIds) {
+        public System.Threading.Tasks.Task<SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorder[]> GetRemoteRecordersByIdAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid[] remoteRecorderIds) {
             return base.Channel.GetRemoteRecordersByIdAsync(auth, remoteRecorderIds);
         }
         
-        public ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorder[] GetRemoteRecordersByExternalId(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, string[] externalIds) {
+        public SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorder[] GetRemoteRecordersByExternalId(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, string[] externalIds) {
             return base.Channel.GetRemoteRecordersByExternalId(auth, externalIds);
         }
         
-        public System.Threading.Tasks.Task<ScheduleRecordingServices.RemoteRecorderManagement.RemoteRecorder[]> GetRemoteRecordersByExternalIdAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, string[] externalIds) {
+        public System.Threading.Tasks.Task<SyllabusPlusSchedulerService.RemoteRecorderManagement.RemoteRecorder[]> GetRemoteRecordersByExternalIdAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, string[] externalIds) {
             return base.Channel.GetRemoteRecordersByExternalIdAsync(auth, externalIds);
         }
         
-        public void UpdateRemoteRecorderExternalId(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid remoteRecorderId, string externalId) {
+        public void UpdateRemoteRecorderExternalId(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid remoteRecorderId, string externalId) {
             base.Channel.UpdateRemoteRecorderExternalId(auth, remoteRecorderId, externalId);
         }
         
-        public System.Threading.Tasks.Task UpdateRemoteRecorderExternalIdAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid remoteRecorderId, string externalId) {
+        public System.Threading.Tasks.Task UpdateRemoteRecorderExternalIdAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid remoteRecorderId, string externalId) {
             return base.Channel.UpdateRemoteRecorderExternalIdAsync(auth, remoteRecorderId, externalId);
         }
         
-        public ScheduleRecordingServices.RemoteRecorderManagement.ListRecordersResponse ListRecorders(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, ScheduleRecordingServices.RemoteRecorderManagement.Pagination pagination, ScheduleRecordingServices.RemoteRecorderManagement.RecorderSortField sortBy) {
+        public SyllabusPlusSchedulerService.RemoteRecorderManagement.ListRecordersResponse ListRecorders(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, SyllabusPlusSchedulerService.RemoteRecorderManagement.Pagination pagination, SyllabusPlusSchedulerService.RemoteRecorderManagement.RecorderSortField sortBy) {
             return base.Channel.ListRecorders(auth, pagination, sortBy);
         }
         
-        public System.Threading.Tasks.Task<ScheduleRecordingServices.RemoteRecorderManagement.ListRecordersResponse> ListRecordersAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, ScheduleRecordingServices.RemoteRecorderManagement.Pagination pagination, ScheduleRecordingServices.RemoteRecorderManagement.RecorderSortField sortBy) {
+        public System.Threading.Tasks.Task<SyllabusPlusSchedulerService.RemoteRecorderManagement.ListRecordersResponse> ListRecordersAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, SyllabusPlusSchedulerService.RemoteRecorderManagement.Pagination pagination, SyllabusPlusSchedulerService.RemoteRecorderManagement.RecorderSortField sortBy) {
             return base.Channel.ListRecordersAsync(auth, pagination, sortBy);
         }
         
-        public ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingResult ScheduleRecording(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, string name, System.Guid folderId, bool isBroadcast, System.DateTime start, System.DateTime end, ScheduleRecordingServices.RemoteRecorderManagement.RecorderSettings[] recorderSettings) {
+        public SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingResult ScheduleRecording(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, string name, System.Guid folderId, bool isBroadcast, System.DateTime start, System.DateTime end, SyllabusPlusSchedulerService.RemoteRecorderManagement.RecorderSettings[] recorderSettings) {
             return base.Channel.ScheduleRecording(auth, name, folderId, isBroadcast, start, end, recorderSettings);
         }
         
-        public System.Threading.Tasks.Task<ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingResult> ScheduleRecordingAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, string name, System.Guid folderId, bool isBroadcast, System.DateTime start, System.DateTime end, ScheduleRecordingServices.RemoteRecorderManagement.RecorderSettings[] recorderSettings) {
+        public System.Threading.Tasks.Task<SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingResult> ScheduleRecordingAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, string name, System.Guid folderId, bool isBroadcast, System.DateTime start, System.DateTime end, SyllabusPlusSchedulerService.RemoteRecorderManagement.RecorderSettings[] recorderSettings) {
             return base.Channel.ScheduleRecordingAsync(auth, name, folderId, isBroadcast, start, end, recorderSettings);
         }
         
-        public ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingResult ScheduleRecurringRecording(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid scheduledSessionId, System.DayOfWeek[] daysOfWeek, System.DateTime end) {
+        public SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingResult ScheduleRecurringRecording(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid scheduledSessionId, System.DayOfWeek[] daysOfWeek, System.DateTime end) {
             return base.Channel.ScheduleRecurringRecording(auth, scheduledSessionId, daysOfWeek, end);
         }
         
-        public System.Threading.Tasks.Task<ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingResult> ScheduleRecurringRecordingAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid scheduledSessionId, System.DayOfWeek[] daysOfWeek, System.DateTime end) {
+        public System.Threading.Tasks.Task<SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingResult> ScheduleRecurringRecordingAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid scheduledSessionId, System.DayOfWeek[] daysOfWeek, System.DateTime end) {
             return base.Channel.ScheduleRecurringRecordingAsync(auth, scheduledSessionId, daysOfWeek, end);
         }
         
-        public ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingResult UpdateRecordingTime(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid sessionId, System.DateTime start, System.DateTime end) {
+        public SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingResult UpdateRecordingTime(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid sessionId, System.DateTime start, System.DateTime end) {
             return base.Channel.UpdateRecordingTime(auth, sessionId, start, end);
         }
         
-        public System.Threading.Tasks.Task<ScheduleRecordingServices.RemoteRecorderManagement.ScheduledRecordingResult> UpdateRecordingTimeAsync(ScheduleRecordingServices.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid sessionId, System.DateTime start, System.DateTime end) {
+        public System.Threading.Tasks.Task<SyllabusPlusSchedulerService.RemoteRecorderManagement.ScheduledRecordingResult> UpdateRecordingTimeAsync(SyllabusPlusSchedulerService.RemoteRecorderManagement.AuthenticationInfo auth, System.Guid sessionId, System.DateTime start, System.DateTime end) {
             return base.Channel.UpdateRecordingTimeAsync(auth, sessionId, start, end);
         }
     }
