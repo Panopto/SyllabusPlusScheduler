@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="Schedule Recording Service" Language="1033" Version="1.0.0.0" Manufacturer="Panopto" UpgradeCode="5b8ba71b-1624-4381-89dd-0c8644826326">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of Schedule Recording Service is already installed." />
+    <Media Id="1" Cabinet="Cab1.cab" EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="Schedule Recording Service" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+        <Directory Id="PanoptoRootFolder" Name="Panopto">
+				  <Directory Id="INSTALLFOLDER" Name="Schedule Recording Service" />
+			  </Directory>
+      </Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="EntityFramework.dll" Guid="1B9244CE-96F8-4104-B466-28E033C855E1">
+        <File Id="EntityFramework.dll" Name="EntityFramework.dll" Source="..\ScheduleRecordingServices\bin\Release\EntityFramework.dll" Vital="yes" KeyPath="no" DiskId="1"/>
+      </Component>
+      <Component Id="EntityFramework.SqlServer.dll" Guid="4C511B72-823E-4B97-B727-8C5FA2DF8DE5">
+        <File Id="EntityFramework.SqlServer.dll" Name="EntityFramework.SqlServer.dll" Source="..\ScheduleRecordingServices\bin\Release\EntityFramework.SqlServer.dll" Vital="yes" KeyPath="no" DiskId="1"/>
+      </Component>
+      <Component Id="ScheduleRecordingServices.exe.config" Guid="EB6B8302-C06E-4bec-ADAC-932C68A3A98D">
+        <File Id="ScheduleRecordingServices.exe.config" Name="ScheduleRecordingServices.exe.config" Source="..\ScheduleRecordingServices\bin\Release\ScheduleRecordingServices.exe.config" Vital="yes" KeyPath="no" DiskId="1"/>
+      </Component>
+      <Component Id="ProductComponent" Guid="ACCCBD4F-D927-4F17-A130-BE334FF138B7">
+        <File Id="ScheduleRecordingServices.exe" Name="ScheduleRecordingServices.exe" Source="..\ScheduleRecordingServices\bin\Release\ScheduleRecordingServices.exe" Vital="yes" KeyPath="yes" DiskId="1"/>
+        <ServiceInstall
+					Id="PanoptoScheduleRecordingServiceInstaller"
+					Type="ownProcess"
+					Vital="yes"
+					Name="Schedule Recording Service"
+					DisplayName="Panopto Schedule Recording Service"
+					Description="Schedules Remote Recordering"
+					Start="auto"
+					Account="LocalSystem"
+					ErrorControl="ignore"
+					Interactive="no">
+        </ServiceInstall>
+        <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="Schedule Recording Service" Wait="yes" />
+      </Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
