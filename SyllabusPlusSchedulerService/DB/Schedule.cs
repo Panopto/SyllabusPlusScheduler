@@ -86,6 +86,11 @@ namespace SyllabusPlusSchedulerService.DB
         public bool? panoptoSyncSuccess { get; set; }
 
         /// <summary>
+        /// Number of attempts of either creating, scheduling, or deleting schedule
+        /// </summary>
+        public int numberOfAttempts { get; set; }
+
+        /// <summary>
         /// Serialized response if there were conflicting
         /// sessions or any other issue that we can log
         /// to indicate why the session scheduling failed

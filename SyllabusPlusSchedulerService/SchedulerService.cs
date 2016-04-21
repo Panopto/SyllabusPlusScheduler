@@ -20,7 +20,7 @@ namespace SyllabusPlusSchedulerService
     {
         private static readonly EventLogger log = new EventLogger();
         private Timer Scheduler;
-
+        private const int MAX_ATTEMPTS = 3;
         public SchedulerService()
         {
             InitializeComponent();
@@ -83,7 +83,9 @@ namespace SyllabusPlusSchedulerService
                         // BUGBUG: 37305 Determine if panopyoSyncSuccess = false should be considered for reschedule
                         List<Schedule> schedules =
                             db.Schedules.Select(s => s).
-                                Where(s => s.lastUpdate > s.lastPanoptoSync || s.panoptoSyncSuccess == null).ToList();
+                                Where( s => s.lastUpdate > s.lastPanoptoSync 
+                                    || s.panoptoSyncSuccess == null 
+                                    || (s.panoptoSyncSuccess == false && s.numberOfAttempts < MAX_ATTEMPTS)).ToList();
 
                         foreach (Schedule schedule in schedules)
                         {
@@ -104,7 +106,7 @@ namespace SyllabusPlusSchedulerService
                                     }
 
                                     schedule.panoptoSyncSuccess = !result.ConflictsExist;
-
+                                    schedule.numberOfAttempts = result.ConflictsExist ? ++schedule.numberOfAttempts : 0;
                                     if (!result.ConflictsExist)
                                     {
                                         // Should only be 1 valid Session ID and never null
@@ -123,6 +125,7 @@ namespace SyllabusPlusSchedulerService
                                         sessionManagementWrapper.DeleteSessions((Guid)schedule.scheduledSessionID);
                                         schedule.cancelSchedule = true;
                                         schedule.panoptoSyncSuccess = true;
+                                        schedule.numberOfAttempts = 0;
                                     }
                                 }
 
