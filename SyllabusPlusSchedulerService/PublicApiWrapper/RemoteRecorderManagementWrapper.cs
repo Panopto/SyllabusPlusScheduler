@@ -8,7 +8,7 @@ using SyllabusPlusSchedulerService.DB;
 using SyllabusPlusSchedulerService.RemoteRecorderManagement;
 using SyllabusPlusSchedulerService.Utility;
 
-namespace SyllabusPlusSchedulerService.PublicAPIWrapper
+namespace SyllabusPlusSchedulerService.PublicApiWrapper
 {
     internal class RemoteRecorderManagementWrapper : IDisposable
     {
@@ -54,7 +54,7 @@ namespace SyllabusPlusSchedulerService.PublicAPIWrapper
         /// <summary>
         /// Wrapper function to schedule recordings
         /// </summary>
-        /// <param name="schedule"></param>
+        /// <param name="schedule">Schedule recording to update</param>
         /// <returns>ScheduleRecordingResult containing errors if applicable</returns>
         public ScheduledRecordingResult ScheduleRecording(Schedule schedule)
         {
@@ -70,6 +70,20 @@ namespace SyllabusPlusSchedulerService.PublicAPIWrapper
                schedule.startTime,
                schedule.startTime.AddMinutes(schedule.duration),
                recorderSettings.ToArray());
+        }
+
+        /// <summary>
+        /// Updates the time of a recording. You may not update a recording that has already finished.
+        /// </summary>
+        /// <param name="schedule">Schedule recording to update</param>
+        /// <returns>ScheduleRecordingResult containing errors if applicable</returns>
+        public ScheduledRecordingResult UpdateRecordingTime(Schedule schedule)
+        {
+            return this.remoteRecorderManager.UpdateRecordingTime(
+                this.authentication,
+                (Guid)schedule.scheduledSessionID,
+                schedule.startTime,
+                schedule.startTime.AddMinutes(schedule.duration));
         }
 
         /// <summary>

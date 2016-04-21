@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using System.Threading;
 using SyllabusPlusSchedulerService.RemoteRecorderManagement;
 using SyllabusPlusSchedulerService.Log;
-using SyllabusPlusSchedulerService.PublicAPIWrapper;
 using SyllabusPlusSchedulerService.DB;
 using SyllabusPlusSchedulerService.Utility;
+using SyllabusPlusSchedulerService.PublicApiWrapper;
 
 namespace SyllabusPlusSchedulerService
 {
@@ -40,7 +40,7 @@ namespace SyllabusPlusSchedulerService
         /// <param name="args"></param>
         protected override void OnStart(string[] args)
         {
-            log.Debug("Schedule Recording Service started.");
+            log.Debug("Syllabus Plus Scheduler Service started.");
             this.ScheduleRecordings();
         }
 
@@ -49,7 +49,7 @@ namespace SyllabusPlusSchedulerService
         /// </summary>
         protected override void OnStop()
         {
-            log.Debug("Schedule Recording Service stopped.");
+            log.Debug("Syllabus Plus Scheduler Service stopped.");
             this.Scheduler.Dispose();
         }
 
@@ -89,21 +89,44 @@ namespace SyllabusPlusSchedulerService
                         {
                             try
                             {
-                                ScheduledRecordingResult result =
-                                    remoteRecorderManagementWrapper.ScheduleRecording(schedule);
+                                if (!schedule.cancelSchedule.HasValue)
+                                {
+                                    ScheduledRecordingResult result = null;
+
+                                    // Schedule session id will determine if need to create or update/delete the corresponding schedule
+                                    if (schedule.scheduledSessionID == null || schedule.scheduledSessionID == Guid.Empty)
+                                    {
+                                        result = remoteRecorderManagementWrapper.ScheduleRecording(schedule);
+                                    }
+                                    else
+                                    {
+                                        result = remoteRecorderManagementWrapper.UpdateRecordingTime(schedule);
+                                    }
+
+                                    schedule.panoptoSyncSuccess = !result.ConflictsExist;
+
+                                    if (!result.ConflictsExist)
+                                    {
+                                        // Should only be 1 valid Session ID and never null
+                                        schedule.scheduledSessionID = result.SessionIDs.FirstOrDefault();
+                                    }
+                                    else
+                                    {
+                                        schedule.errorResponse = XmlHelper.SerializeXMLToString(result);
+                                    }
+                                }
+                                // Cancel Schedule has been requested and not succeeded
+                                else if (schedule.cancelSchedule == false)
+                                {
+                                    using (SessionManagementWrapper sessionManagementWrapper = new SessionManagementWrapper(configSettings))
+                                    {
+                                        sessionManagementWrapper.DeleteSessions((Guid)schedule.scheduledSessionID);
+                                        schedule.cancelSchedule = true;
+                                        schedule.panoptoSyncSuccess = true;
+                                    }
+                                }
 
                                 schedule.lastPanoptoSync = schedule.lastUpdate = DateTime.UtcNow;
-                                schedule.panoptoSyncSuccess = !result.ConflictsExist;
-
-                                if (!result.ConflictsExist)
-                                {
-                                    // Should only be 1 valid Session ID and never null
-                                    schedule.scheduledSessionID = result.SessionIDs.FirstOrDefault();
-                                }
-                                else
-                                {
-                                    schedule.errorResponse = XmlHelper.SerializeXMLToString(result);
-                                }
                             }
                             catch (Exception ex)
                             {
@@ -112,9 +135,10 @@ namespace SyllabusPlusSchedulerService
                                 schedule.lastPanoptoSync = schedule.lastUpdate = DateTime.UtcNow;
                                 schedule.panoptoSyncSuccess = false;
                             }
+
+                            // Save after every iteration to prevent scheduling not being insync with Panopto Server
+                            db.SaveChanges();
                         }
-                        
-                        db.SaveChanges();
                     }
                 }
                 
