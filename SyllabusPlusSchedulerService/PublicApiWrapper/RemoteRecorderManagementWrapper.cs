@@ -26,13 +26,15 @@ namespace SyllabusPlusSchedulerService.PublicApiWrapper
         /// Constructor to create a RemoteRecorderManagement including
         /// necessary information to create the SOAP API calls
         /// </summary>
-        /// <param name="configSettings">App settings used for API request</param>
-        public RemoteRecorderManagementWrapper(ConfigSettings configSettings)
+        /// <param name="site">Panopto Site</param>
+        /// <param name="username">admin username</param>
+        /// <param name="password">password associated with username</param>
+        public RemoteRecorderManagementWrapper(string site, string username, string password)
         {
             // Update Service endpoint to reflect specified server name
             UriBuilder userManagementUriBuilder = new UriBuilder();
             userManagementUriBuilder.Scheme = "https";
-            userManagementUriBuilder.Host = configSettings.PanoptoSite;
+            userManagementUriBuilder.Host = site;
             userManagementUriBuilder.Path = @"Panopto/PublicAPI/4.2/RemoteRecorderManagement.svc";
 
             this.remoteRecorderManager = new RemoteRecorderManagementClient(
@@ -46,8 +48,8 @@ namespace SyllabusPlusSchedulerService.PublicApiWrapper
 
             this.authentication = new AuthenticationInfo()
             {
-                UserKey = configSettings.PanoptoUserName,
-                Password = configSettings.PanoptoPassword
+                UserKey = username,
+                Password = password
             };
         }
 

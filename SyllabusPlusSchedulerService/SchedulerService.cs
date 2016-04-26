@@ -21,6 +21,7 @@ namespace SyllabusPlusSchedulerService
         private static readonly EventLogger log = new EventLogger();
         private Timer Scheduler;
         private const int MAX_ATTEMPTS = 3;
+        private ConfigSettings configSettings = new ConfigSettings();
         public SchedulerService()
         {
             InitializeComponent();
@@ -73,36 +74,41 @@ namespace SyllabusPlusSchedulerService
                 this.Scheduler = new Timer(new TimerCallback(ScheduleCallback));
 
                 // Gets and Sets App Settings
-                ConfigSettings configSettings = new ConfigSettings();
-
-                using (RemoteRecorderManagementWrapper remoteRecorderManagementWrapper
-                    = new RemoteRecorderManagementWrapper(configSettings))
+                
+                Schedule schedule = null;
+                do
                 {
                     using (SyllabusPlusDBContext db = new SyllabusPlusDBContext())
                     {
-                        // BUGBUG: 37305 Determine if panopyoSyncSuccess = false should be considered for reschedule
-                        List<Schedule> schedules =
+                        schedule =
                             db.Schedules.Select(s => s).
-                                Where( s => s.lastUpdate > s.lastPanoptoSync 
-                                    || s.panoptoSyncSuccess == null 
-                                    || (s.panoptoSyncSuccess == false && s.numberOfAttempts < MAX_ATTEMPTS)).ToList();
+                                Where(s => s.lastUpdate > s.lastPanoptoSync
+                                    || s.panoptoSyncSuccess == null
+                                    || (s.panoptoSyncSuccess == false && s.numberOfAttempts < MAX_ATTEMPTS)).FirstOrDefault();
 
-                        foreach (Schedule schedule in schedules)
+                        try
                         {
-                            try
+                            if (schedule != null)
                             {
                                 if (!schedule.cancelSchedule.HasValue)
                                 {
                                     ScheduledRecordingResult result = null;
 
-                                    // Schedule session id will determine if need to create or update/delete the corresponding schedule
-                                    if (schedule.scheduledSessionID == null || schedule.scheduledSessionID == Guid.Empty)
+                                    using (RemoteRecorderManagementWrapper remoteRecorderManagementWrapper
+                                        = new RemoteRecorderManagementWrapper(
+                                            this.configSettings.PanoptoSite,
+                                            this.configSettings.PanoptoUserName,
+                                            this.configSettings.PanoptoPassword))
                                     {
-                                        result = remoteRecorderManagementWrapper.ScheduleRecording(schedule);
-                                    }
-                                    else
-                                    {
-                                        result = remoteRecorderManagementWrapper.UpdateRecordingTime(schedule);
+                                        // Schedule session id will determine if need to create or update/delete the corresponding schedule
+                                        if (schedule.scheduledSessionID == null || schedule.scheduledSessionID == Guid.Empty)
+                                        {
+                                            result = remoteRecorderManagementWrapper.ScheduleRecording(schedule);
+                                        }
+                                        else
+                                        {
+                                            result = remoteRecorderManagementWrapper.UpdateRecordingTime(schedule);
+                                        }
                                     }
 
                                     schedule.panoptoSyncSuccess = !result.ConflictsExist;
@@ -117,10 +123,15 @@ namespace SyllabusPlusSchedulerService
                                         schedule.errorResponse = XmlHelper.SerializeXMLToString(result);
                                     }
                                 }
+
                                 // Cancel Schedule has been requested and not succeeded
                                 else if (schedule.cancelSchedule == false)
                                 {
-                                    using (SessionManagementWrapper sessionManagementWrapper = new SessionManagementWrapper(configSettings))
+                                    using (SessionManagementWrapper sessionManagementWrapper
+                                        = new SessionManagementWrapper(
+                                            this.configSettings.PanoptoSite,
+                                            this.configSettings.PanoptoUserName,
+                                            this.configSettings.PanoptoPassword))
                                     {
                                         sessionManagementWrapper.DeleteSessions((Guid)schedule.scheduledSessionID);
                                         schedule.cancelSchedule = true;
@@ -129,22 +140,21 @@ namespace SyllabusPlusSchedulerService
                                     }
                                 }
 
-                                schedule.lastPanoptoSync = schedule.lastUpdate = DateTime.UtcNow;
+                                schedule.lastPanoptoSync = DateTime.UtcNow;
                             }
-                            catch (Exception ex)
-                            {
-                                log.Error(ex.Message, ex);
-                                schedule.errorResponse = XmlHelper.SerializeXMLToString(ex);
-                                schedule.lastPanoptoSync = schedule.lastUpdate = DateTime.UtcNow;
-                                schedule.panoptoSyncSuccess = false;
-                            }
-
-                            // Save after every iteration to prevent scheduling not being insync with Panopto Server
-                            db.SaveChanges();
                         }
+                        catch (Exception ex)
+                        {
+                            log.Error(ex.Message, ex);
+                            schedule.errorResponse = XmlHelper.SerializeXMLToString(ex);
+                            schedule.lastPanoptoSync = schedule.lastUpdate = DateTime.UtcNow;
+                            schedule.panoptoSyncSuccess = false;
+                        }
+
+                        // Save after every iteration to prevent scheduling not being insync with Panopto Server
+                        db.SaveChanges();
                     }
-                }
-                
+                } while (schedule != null);
                 this.Scheduler.Change(configSettings.SyncInterval * 60000, Timeout.Infinite);
             }
             catch (Exception ex)

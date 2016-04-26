@@ -9,7 +9,8 @@ Most options explained below can be found and modified in the ScheduleRecordingS
 
 This service creates remote recorder scheduling using credentials stored in config file for its installer
 
-This service will periodically (based on the interval set in the config file) check the DB's "Schedules" table to determine if any new or updated entries have been added.
+This service will periodically (based on the interval set in the config file) check the DB's "Schedules" table to determine if any new or updated entries have been added. 
+Note: Something to be aware of, any entries that are updated, only the start and duration of the schedule recording will take affect. This will NOT update Session names, and other fields.
 
 If the lastUpdate timestamp exceeds lastPanoptoSync timestamp or PanoptoSyncSuccess is null, the service will attempt to schedule a remote recording based on the data provided in that row.
 

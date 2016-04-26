@@ -25,13 +25,15 @@ namespace SyllabusPlusSchedulerService.PublicApiWrapper
         /// Constructor to create a SessionManagement including
         /// necessary information to create the SOAP API calls
         /// </summary>
-        /// <param name="configSettings">App settings used for API request</param>
-        public SessionManagementWrapper(ConfigSettings configSettings)
+        /// <param name="site">Panopto Site</param>
+        /// <param name="username">admin username</param>
+        /// <param name="password">password associated with username</param>
+        public SessionManagementWrapper(string site, string username, string password)
         {
             // Update Service endpoint to reflect specified server name
             UriBuilder sessionManagementUriBuilder = new UriBuilder();
             sessionManagementUriBuilder.Scheme = "https";
-            sessionManagementUriBuilder.Host = configSettings.PanoptoSite;
+            sessionManagementUriBuilder.Host = site;
             sessionManagementUriBuilder.Path = @"Panopto/PublicAPI/4.6/SessionManagement.svc";
 
             this.sessionManagement = new SessionManagementClient(
@@ -45,8 +47,8 @@ namespace SyllabusPlusSchedulerService.PublicApiWrapper
 
             this.authentication = new AuthenticationInfo()
             {
-                UserKey = configSettings.PanoptoUserName,
-                Password = configSettings.PanoptoPassword
+                UserKey = username,
+                Password = password
             };
         }
 
