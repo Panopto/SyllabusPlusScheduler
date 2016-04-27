@@ -21,7 +21,9 @@ namespace SyllabusPlusSchedulerService
         private static readonly EventLogger log = new EventLogger();
         private Timer Scheduler;
         private const int MAX_ATTEMPTS = 3;
+        private object thisLock = new object();
         private ConfigSettings configSettings = new ConfigSettings();
+
         public SchedulerService()
         {
             InitializeComponent();
@@ -42,7 +44,8 @@ namespace SyllabusPlusSchedulerService
         protected override void OnStart(string[] args)
         {
             log.Debug("Syllabus Plus Scheduler Service started.");
-            this.ScheduleRecordings();
+            this.Scheduler = new Timer(new TimerCallback(ScheduleCallback),
+                state: null, dueTime: 0, period: (this.configSettings.SyncInterval * 60000));
         }
 
         /// <summary>
@@ -61,7 +64,10 @@ namespace SyllabusPlusSchedulerService
         /// <param name="e"></param>
         private void ScheduleCallback(object e)
         {
-            this.ScheduleRecordings();
+            lock (thisLock)
+            {
+                this.ScheduleRecordings();
+            }
         }
 
         /// <summary>
@@ -71,11 +77,8 @@ namespace SyllabusPlusSchedulerService
         {
             try
             {
-                this.Scheduler = new Timer(new TimerCallback(ScheduleCallback));
-
-                // Gets and Sets App Settings
-                
                 Schedule schedule = null;
+                XmlHelper<ScheduledRecordingResult> xmlScheduledRecordingHelper = new XmlHelper<ScheduledRecordingResult>;
                 do
                 {
                     using (SyllabusPlusDBContext db = new SyllabusPlusDBContext())
@@ -113,6 +116,7 @@ namespace SyllabusPlusSchedulerService
 
                                     schedule.panoptoSyncSuccess = !result.ConflictsExist;
                                     schedule.numberOfAttempts = result.ConflictsExist ? ++schedule.numberOfAttempts : 0;
+
                                     if (!result.ConflictsExist)
                                     {
                                         // Should only be 1 valid Session ID and never null
@@ -120,7 +124,7 @@ namespace SyllabusPlusSchedulerService
                                     }
                                     else
                                     {
-                                        schedule.errorResponse = XmlHelper.SerializeXMLToString(result);
+                                        schedule.errorResponse = xmlScheduledRecordingHelper.SerializeXMLToString(result);
                                     }
                                 }
 
@@ -146,7 +150,7 @@ namespace SyllabusPlusSchedulerService
                         catch (Exception ex)
                         {
                             log.Error(ex.Message, ex);
-                            schedule.errorResponse = XmlHelper.SerializeXMLToString(ex);
+                            schedule.errorResponse = ex.Message;
                             schedule.lastPanoptoSync = schedule.lastUpdate = DateTime.UtcNow;
                             schedule.panoptoSyncSuccess = false;
                         }
@@ -155,7 +159,6 @@ namespace SyllabusPlusSchedulerService
                         db.SaveChanges();
                     }
                 } while (schedule != null);
-                this.Scheduler.Change(configSettings.SyncInterval * 60000, Timeout.Infinite);
             }
             catch (Exception ex)
             {

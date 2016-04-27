@@ -38,7 +38,15 @@ namespace SyllabusPlusSchedulerService.Utility
             this.PanoptoSite = ConfigurationManager.AppSettings["PanoptoSite"];
             this.PanoptoUserName = ConfigurationManager.AppSettings["PanoptoUserName"];
             this.PanoptoPassword = ConfigurationManager.AppSettings["PanoptoPassword"];
+            this.PopulateSyncInterval();
 
+        }
+
+        /// <summary>
+        /// Attempts to populate Sync Interval from App.Config. Defaults to 60 minutes
+        /// </summary>
+        private void PopulateSyncInterval()
+        {
             int syncInterval;
             if (Int32.TryParse(ConfigurationManager.AppSettings["SyncInterval"], out syncInterval))
             {

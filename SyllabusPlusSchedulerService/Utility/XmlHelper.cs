@@ -8,19 +8,25 @@ using System.Xml.Serialization;
 
 namespace SyllabusPlusSchedulerService.Utility
 {
-    internal class XmlHelper
+    internal class XmlHelper<TType>
     {
+        private XmlSerializer xmlSerializer;
+
+        public XmlHelper()
+        {
+            this.xmlSerializer = new XmlSerializer(typeof(TType));
+        }
+
         /// <summary>
         /// Serializes the object to an XML formatted string
         /// </summary>
         /// <param name="obj">Object to serialize to XML</param>
         /// <returns>XML formatted string of the object</returns>
-        public static string SerializeXMLToString(object obj)
+        public string SerializeXMLToString(TType obj)
         {
             using (StringWriter strWriter = new StringWriter())
             {
-                XmlSerializer xmlSerializer = new XmlSerializer(obj.GetType());
-                xmlSerializer.Serialize(strWriter, obj);
+                this.xmlSerializer.Serialize(strWriter, obj);
 
                 return strWriter.ToString();
             }
