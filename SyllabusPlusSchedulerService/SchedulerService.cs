@@ -23,6 +23,7 @@ namespace SyllabusPlusSchedulerService
         private const int MAX_ATTEMPTS = 3;
         private object thisLock = new object();
         private ConfigSettings configSettings = new ConfigSettings();
+        XmlHelper<ScheduledRecordingResult> xmlScheduledRecordingHelper = new XmlHelper<ScheduledRecordingResult>();
 
         public SchedulerService()
         {
@@ -78,7 +79,7 @@ namespace SyllabusPlusSchedulerService
             try
             {
                 Schedule schedule = null;
-                XmlHelper<ScheduledRecordingResult> xmlScheduledRecordingHelper = new XmlHelper<ScheduledRecordingResult>();
+                
                 do
                 {
                     using (SyllabusPlusDBContext db = new SyllabusPlusDBContext())
@@ -125,7 +126,7 @@ namespace SyllabusPlusSchedulerService
                                     }
                                     else
                                     {
-                                        schedule.errorResponse = xmlScheduledRecordingHelper.SerializeXMLToString(result);
+                                        schedule.errorResponse = this.xmlScheduledRecordingHelper.SerializeXMLToString(result);
                                     }
                                 }
 
