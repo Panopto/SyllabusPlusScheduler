@@ -78,16 +78,17 @@ namespace SyllabusPlusSchedulerService
             try
             {
                 Schedule schedule = null;
-                XmlHelper<ScheduledRecordingResult> xmlScheduledRecordingHelper = new XmlHelper<ScheduledRecordingResult>;
+                XmlHelper<ScheduledRecordingResult> xmlScheduledRecordingHelper = new XmlHelper<ScheduledRecordingResult>();
                 do
                 {
                     using (SyllabusPlusDBContext db = new SyllabusPlusDBContext())
                     {
                         schedule =
                             db.Schedules.Select(s => s).
-                                Where(s => s.lastUpdate > s.lastPanoptoSync
-                                    || s.panoptoSyncSuccess == null
-                                    || (s.panoptoSyncSuccess == false && s.numberOfAttempts < MAX_ATTEMPTS)).FirstOrDefault();
+                                Where(  s => (s.lastUpdate > s.lastPanoptoSync && s.panoptoSyncSuccess == true)
+                                    ||  s.panoptoSyncSuccess == null
+                                    || (s.panoptoSyncSuccess == false && s.numberOfAttempts < MAX_ATTEMPTS)).
+                                OrderBy(s => s.lastUpdate).FirstOrDefault();
 
                         try
                         {
@@ -151,8 +152,8 @@ namespace SyllabusPlusSchedulerService
                         {
                             log.Error(ex.Message, ex);
                             schedule.errorResponse = ex.Message;
-                            schedule.lastPanoptoSync = schedule.lastUpdate = DateTime.UtcNow;
                             schedule.panoptoSyncSuccess = false;
+                            schedule.numberOfAttempts++;
                         }
 
                         // Save after every iteration to prevent scheduling not being insync with Panopto Server
