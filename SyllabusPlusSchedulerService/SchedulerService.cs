@@ -23,7 +23,7 @@ namespace SyllabusPlusSchedulerService
         private const int MAX_ATTEMPTS = 3;
         private object thisLock = new object();
         private ConfigSettings configSettings = new ConfigSettings();
-        XmlHelper<ScheduledRecordingResult> xmlScheduledRecordingHelper = new XmlHelper<ScheduledRecordingResult>();
+        private XmlHelper<ScheduledRecordingResult> xmlScheduledRecordingHelper = new XmlHelper<ScheduledRecordingResult>();
 
         public SchedulerService()
         {
