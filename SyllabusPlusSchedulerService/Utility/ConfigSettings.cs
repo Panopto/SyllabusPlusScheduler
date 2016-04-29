@@ -27,7 +27,7 @@ namespace SyllabusPlusSchedulerService.Utility
         /// <summary>
         /// Interval when service runs in minutes
         /// </summary>
-        public int SyncInterval { get; private set; }
+        public int SyncIntervalInMinutes { get; private set; }
 
         /// <summary>
         /// ConfigSettings constructor that gets settings from the config
@@ -50,12 +50,12 @@ namespace SyllabusPlusSchedulerService.Utility
             int syncInterval;
             if (Int32.TryParse(ConfigurationManager.AppSettings["SyncInterval"], out syncInterval))
             {
-                this.SyncInterval = syncInterval;
+                this.SyncIntervalInMinutes = syncInterval;
             }
             else
             {
                 // Default to 60
-                this.SyncInterval = 60;
+                this.SyncIntervalInMinutes = 60;
             }
         }
     }

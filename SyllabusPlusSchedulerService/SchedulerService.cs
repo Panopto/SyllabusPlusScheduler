@@ -21,6 +21,7 @@ namespace SyllabusPlusSchedulerService
         private static readonly EventLogger log = new EventLogger();
         private Timer Scheduler;
         private const int MAX_ATTEMPTS = 3;
+        private bool isRunning;
         private object thisLock = new object();
         private ConfigSettings configSettings = new ConfigSettings();
         private XmlHelper<ScheduledRecordingResult> xmlScheduledRecordingHelper = new XmlHelper<ScheduledRecordingResult>();
@@ -46,7 +47,7 @@ namespace SyllabusPlusSchedulerService
         {
             log.Debug("Syllabus Plus Scheduler Service started.");
             this.Scheduler = new Timer(new TimerCallback(ScheduleCallback),
-                state: null, dueTime: 0, period: (this.configSettings.SyncInterval * 60000));
+                state: null, dueTime: 0, period: (this.configSettings.SyncIntervalInMinutes * 60000));
         }
 
         /// <summary>
@@ -65,9 +66,14 @@ namespace SyllabusPlusSchedulerService
         /// <param name="e"></param>
         private void ScheduleCallback(object e)
         {
-            lock (thisLock)
+            if (!isRunning)
             {
-                this.ScheduleRecordings();
+                lock (thisLock)
+                {
+                    this.isRunning = true;
+                    this.ScheduleRecordings();
+                    this.isRunning = false;
+                }
             }
         }
 
@@ -85,7 +91,7 @@ namespace SyllabusPlusSchedulerService
                     using (SyllabusPlusDBContext db = new SyllabusPlusDBContext())
                     {
                         schedule =
-                            db.Schedules.Select(s => s).
+                            db.SchedulesTable.Select(s => s).
                                 Where(  s => (s.lastUpdate > s.lastPanoptoSync && s.panoptoSyncSuccess == true)
                                     ||  s.panoptoSyncSuccess == null
                                     || (s.panoptoSyncSuccess == false && s.numberOfAttempts < MAX_ATTEMPTS)).

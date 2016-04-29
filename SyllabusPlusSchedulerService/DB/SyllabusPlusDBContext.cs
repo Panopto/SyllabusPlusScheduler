@@ -9,6 +9,6 @@ namespace SyllabusPlusSchedulerService.DB
 {
     internal class SyllabusPlusDBContext : DbContext
     {
-        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<Schedule> SchedulesTable { get; set; }
     }
 }
