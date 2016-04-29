@@ -123,16 +123,17 @@ namespace SyllabusPlusSchedulerService
                                     }
 
                                     schedule.panoptoSyncSuccess = !result.ConflictsExist;
-                                    schedule.numberOfAttempts = result.ConflictsExist ? ++schedule.numberOfAttempts : 0;
 
                                     if (!result.ConflictsExist)
                                     {
                                         // Should only be 1 valid Session ID and never null
                                         schedule.scheduledSessionID = result.SessionIDs.FirstOrDefault();
+                                        schedule.numberOfAttempts = 0;
                                     }
                                     else
                                     {
                                         schedule.errorResponse = this.xmlScheduledRecordingHelper.SerializeXMLToString(result);
+                                        schedule.numberOfAttempts++;
                                     }
                                 }
 
