@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyllabusPlusSchedulerService", "SyllabusPlusSchedulerService\SyllabusPlusSchedulerService.csproj", "{F5DE558D-6739-4A2B-84DB-20504351404A}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SyllabusPlusSchedulerServiceInstaller", "SyllabusPlusSchedulerServiceInstaller\SyllabusPlusSchedulerServiceInstaller.wixproj", "{D26E6CA2-E320-40DA-977E-7C5015F673AE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F5DE558D-6739-4A2B-84DB-20504351404A} = {F5DE558D-6739-4A2B-84DB-20504351404A}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5DE558D-6739-4A2B-84DB-20504351404A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5DE558D-6739-4A2B-84DB-20504351404A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5DE558D-6739-4A2B-84DB-20504351404A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5DE558D-6739-4A2B-84DB-20504351404A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D26E6CA2-E320-40DA-977E-7C5015F673AE}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{D26E6CA2-E320-40DA-977E-7C5015F673AE}.Debug|Any CPU.Build.0 = Debug|x86
+		{D26E6CA2-E320-40DA-977E-7C5015F673AE}.Release|Any CPU.ActiveCfg = Release|x86
+		{D26E6CA2-E320-40DA-977E-7C5015F673AE}.Release|Any CPU.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
