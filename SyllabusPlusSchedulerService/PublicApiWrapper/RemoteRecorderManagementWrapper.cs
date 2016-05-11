@@ -61,16 +61,16 @@ namespace SyllabusPlusSchedulerService.PublicApiWrapper
         public ScheduledRecordingResult ScheduleRecording(Schedule schedule)
         {
             List<RecorderSettings> recorderSettings = this.GetRecorderSettings(
-                schedule.primaryRemoteRecorderID, 
-                schedule.secondaryRemoteRecorderID);
+                schedule.PrimaryRemoteRecorderId, 
+                schedule.SecondaryRemoteRecorderId);
 
             return this.remoteRecorderManager.ScheduleRecording(
                authentication,
-               schedule.sessionName,
-               schedule.folderID,
-               schedule.webcast,
-               schedule.startTime,
-               schedule.startTime.AddMinutes(schedule.duration),
+               schedule.SessionName,
+               schedule.FolderId,
+               schedule.Webcast,
+               schedule.StartTime,
+               schedule.StartTime.AddMinutes(schedule.Duration),
                recorderSettings.ToArray());
         }
 
@@ -83,9 +83,9 @@ namespace SyllabusPlusSchedulerService.PublicApiWrapper
         {
             return this.remoteRecorderManager.UpdateRecordingTime(
                 this.authentication,
-                (Guid)schedule.scheduledSessionID,
-                schedule.startTime,
-                schedule.startTime.AddMinutes(schedule.duration));
+                (Guid)schedule.ScheduledSessionId,
+                schedule.StartTime,
+                schedule.StartTime.AddMinutes(schedule.Duration));
         }
 
         /// <summary>

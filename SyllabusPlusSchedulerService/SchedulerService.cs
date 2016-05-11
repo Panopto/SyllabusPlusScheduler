@@ -92,16 +92,16 @@ namespace SyllabusPlusSchedulerService
                     {
                         schedule =
                             db.SchedulesTable.Select(s => s).
-                                Where(  s => (s.lastUpdate > s.lastPanoptoSync && s.panoptoSyncSuccess == true)
-                                    ||  s.panoptoSyncSuccess == null
-                                    || (s.panoptoSyncSuccess == false && s.numberOfAttempts < MAX_ATTEMPTS)).
-                                OrderBy(s => s.lastUpdate).FirstOrDefault();
+                                Where(  s => (s.LastUpdate > s.LastPanoptoSync && s.PanoptoSyncSuccess == true)
+                                    ||  s.PanoptoSyncSuccess == null
+                                    || (s.PanoptoSyncSuccess == false && s.NumberOfAttempts < MAX_ATTEMPTS)).
+                                OrderBy(s => s.LastUpdate).FirstOrDefault();
 
                         try
                         {
                             if (schedule != null)
                             {
-                                if (!schedule.cancelSchedule.HasValue)
+                                if (!schedule.CancelSchedule.HasValue)
                                 {
                                     ScheduledRecordingResult result = null;
 
@@ -112,7 +112,7 @@ namespace SyllabusPlusSchedulerService
                                             this.configSettings.PanoptoPassword))
                                     {
                                         // Schedule session id will determine if need to create or update/delete the corresponding schedule
-                                        if (schedule.scheduledSessionID == null || schedule.scheduledSessionID == Guid.Empty)
+                                        if (schedule.ScheduledSessionId == null || schedule.ScheduledSessionId == Guid.Empty)
                                         {
                                             result = remoteRecorderManagementWrapper.ScheduleRecording(schedule);
                                         }
@@ -122,23 +122,23 @@ namespace SyllabusPlusSchedulerService
                                         }
                                     }
 
-                                    schedule.panoptoSyncSuccess = !result.ConflictsExist;
+                                    schedule.PanoptoSyncSuccess = !result.ConflictsExist;
 
                                     if (!result.ConflictsExist)
                                     {
                                         // Should only be 1 valid Session ID and never null
-                                        schedule.scheduledSessionID = result.SessionIDs.FirstOrDefault();
-                                        schedule.numberOfAttempts = 0;
+                                        schedule.ScheduledSessionId = result.SessionIDs.FirstOrDefault();
+                                        schedule.NumberOfAttempts = 0;
                                     }
                                     else
                                     {
-                                        schedule.errorResponse = this.xmlScheduledRecordingHelper.SerializeXMLToString(result);
-                                        schedule.numberOfAttempts++;
+                                        schedule.ErrorResponse = this.xmlScheduledRecordingHelper.SerializeXMLToString(result);
+                                        schedule.NumberOfAttempts++;
                                     }
                                 }
 
                                 // Cancel Schedule has been requested and not succeeded
-                                else if (schedule.cancelSchedule == false)
+                                else if (schedule.CancelSchedule == false)
                                 {
                                     using (SessionManagementWrapper sessionManagementWrapper
                                         = new SessionManagementWrapper(
@@ -146,22 +146,22 @@ namespace SyllabusPlusSchedulerService
                                             this.configSettings.PanoptoUserName,
                                             this.configSettings.PanoptoPassword))
                                     {
-                                        sessionManagementWrapper.DeleteSessions((Guid)schedule.scheduledSessionID);
-                                        schedule.cancelSchedule = true;
-                                        schedule.panoptoSyncSuccess = true;
-                                        schedule.numberOfAttempts = 0;
+                                        sessionManagementWrapper.DeleteSessions((Guid)schedule.ScheduledSessionId);
+                                        schedule.CancelSchedule = true;
+                                        schedule.PanoptoSyncSuccess = true;
+                                        schedule.NumberOfAttempts = 0;
                                     }
                                 }
 
-                                schedule.lastPanoptoSync = DateTime.UtcNow;
+                                schedule.LastPanoptoSync = DateTime.UtcNow;
                             }
                         }
                         catch (Exception ex)
                         {
                             log.Error(ex.Message, ex);
-                            schedule.errorResponse = ex.Message;
-                            schedule.panoptoSyncSuccess = false;
-                            schedule.numberOfAttempts++;
+                            schedule.ErrorResponse = ex.Message;
+                            schedule.PanoptoSyncSuccess = false;
+                            schedule.NumberOfAttempts++;
                         }
 
                         // Save after every iteration to prevent scheduling not being insync with Panopto Server

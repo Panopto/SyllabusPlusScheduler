@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PublicApiWrapper\SessionManagementWrapper.cs" />
     <Compile Include="Service References\RemoteRecorderManagement\Reference.cs">
       <AutoGen>True</AutoGen>
