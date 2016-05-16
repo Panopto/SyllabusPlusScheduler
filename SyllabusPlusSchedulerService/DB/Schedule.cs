@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace SyllabusPlusSchedulerService.DB
         /// Name of the Recording to be shown in the Panopto UI
         /// </summary>
         [Column("sessionName")]
+        [MaxLength(255)]
         public string SessionName { get; set; }
 
         /// <summary>
@@ -56,6 +58,7 @@ namespace SyllabusPlusSchedulerService.DB
         /// use remote recorder service as the creator
         /// </summary>
         [Column("presenterUsername")]
+        [MaxLength(255)]
         public string PresenterUsername { get; set; }
 
         /// <summary>
