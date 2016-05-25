@@ -56,7 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PublicApiWrapper\SessionManagementWrapper.cs" />
     <Compile Include="Service References\RemoteRecorderManagement\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -90,7 +89,9 @@
     <Compile Include="Utility\XmlHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

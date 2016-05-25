@@ -42,7 +42,6 @@
             this.PanoptoScheduleRecordingServiceInstaller.Description = "Schedules Remote Recordering";
             this.PanoptoScheduleRecordingServiceInstaller.DisplayName = "Schedule Recording Service";
             this.PanoptoScheduleRecordingServiceInstaller.ServiceName = "Panopto Schedule Recording Service";
-            this.PanoptoScheduleRecordingServiceInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller
             // 
