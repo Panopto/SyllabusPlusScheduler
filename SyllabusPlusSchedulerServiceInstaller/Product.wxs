@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<Product Id="*" Name="Syllabus Plus Scheduler Service" Language="1033" Version="1.0.0.0" Manufacturer="Panopto" UpgradeCode="5b8ba71b-1624-4381-89dd-0c8644826326">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
@@ -31,6 +31,56 @@
       </Component>
       <Component Id="ScheduleRecordingServices.exe.config" Guid="EB6B8302-C06E-4bec-ADAC-932C68A3A98D">
         <File Id="ScheduleRecordingServices.exe.config" Name="ScheduleRecordingServices.exe.config" Source="..\SyllabusPlusSchedulerService\bin\Release\SyllabusPlusSchedulerService.exe.config" Vital="yes" KeyPath="no" DiskId="1"/>
+
+        <!-- Update Panopto servername-->
+        <util:XmlFile Id="UpdateServerName"
+                Action="setValue"
+                Permanent="yes"
+                File="[#ScheduleRecordingServices.exe.config]"
+                ElementPath="//appSettings/add[\[]@key=&apos;PanoptoSite&apos;[\]]/@value"
+                Value="[PANOPTOSERVERNAME]"
+                SelectionLanguage="XPath"
+                Sequence = "1"/>
+      
+        <!-- Update Panopto Admin username-->
+        <util:XmlFile Id="UpdateUsername"
+                Action="setValue"
+                Permanent="yes"
+                File="[#ScheduleRecordingServices.exe.config]"
+                ElementPath="//appSettings/add[\[]@key=&apos;PanoptoUserName&apos;[\]]/@value"
+                Value="[USERNAME]"
+                SelectionLanguage="XPath"
+                Sequence = "2"/>
+     
+        <!-- Update Panopto Admin password-->
+        <util:XmlFile Id="UpdatePassword"
+                Action="setValue"
+                Permanent="yes"
+                File="[#ScheduleRecordingServices.exe.config]"
+                ElementPath="//appSettings/add[\[]@key=&apos;PanoptoPassword&apos;[\]]/@value"
+                Value="[PASSWORD]"
+                SelectionLanguage="XPath"
+                Sequence = "3"/>
+             
+        <!-- Update Sync Interval Time (Default will be set in code)-->
+        <util:XmlFile Id="UpdateSyncInterval"
+                Action="setValue"
+                Permanent="yes"
+                File="[#ScheduleRecordingServices.exe.config]"
+                ElementPath="//appSettings/add[\[]@key=&apos;SyncInterval&apos;[\]]/@value"
+                Value="[SYNCINTERVAL]"
+                SelectionLanguage="XPath"
+                Sequence = "4"/>
+      
+        <!-- Update a DB Connection string-->
+        <util:XmlFile Id="UpdateConnectionString"
+                Action="setValue"
+                Permanent="yes"
+                File="[#ScheduleRecordingServices.exe.config]"
+                ElementPath="/configuration/connectionStrings/add[\[]@name=&apos;SyllabusPlusDBContext&apos;[\]]/@connectionString"
+                Value="Data Source=[DBSERVER];Initial Catalog=[DBNAME];Integrated Security=True"
+                SelectionLanguage="XPath"
+                Sequence = "5"/>
       </Component>
       <Component Id="ProductComponent" Guid="ACCCBD4F-D927-4F17-A130-BE334FF138B7">
         <File Id="ScheduleRecordingServices.exe" Name="ScheduleRecordingServices.exe" Source="..\SyllabusPlusSchedulerService\bin\Release\SyllabusPlusSchedulerService.exe" Vital="yes" KeyPath="yes" DiskId="1"/>

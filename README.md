@@ -18,20 +18,27 @@ If the lastUpdate timestamp exceeds lastPanoptoSync timestamp or PanoptoSyncSucc
 If any errors occurs or conflicts in scheduled recordings, the schedule table includes an errorMessage column containing an XML with the appropriate error message.
 
 Using the service: 
-	Before starting the service, be sure to modify the *.config as necessary:
-		- DB Connection String
-		- Panopto Username
-		- Panopto Password
-		- Sync Interval in minutes
+
 
 	Two Options
 	Option 1:
-		Navigate to ScheduleRecordingServiceInstaller/Bin/{Release|Debug} and run the .msi
+		Open command prompt with admin priviledges
+		
+		Navigate to ScheduleRecordingServiceInstaller/Bin/Release and run the following command:
+		
+		ScheduleRecordingServiceInstaller.msi PANOPTOSERVERNAME=<Panopto Servername> USERNAME=<Panopto Username> PASSWORD=<Panopto Password> SYNCINTERVAL=<Sync Interval in minutes> DBSERVER=<Location of DB server> DBNAME=<Name of DB>
 		
 		The service should run and install automatically to ProgramsFolder\Panopto
 		
 		To uninstall the service, go to Programs and Features to uninstall the service
 	Option 2:
+		Before starting the service, be sure to modify the *.config as necessary:
+		- DB Connection String
+		- Panopto Username
+		- Panopto Password
+		- Panopto Servername
+		- Sync Interval in minutes
+		
 		Use the Developer Command Prompt in Visual Studio Tools to install the service's .exe file; 
 			navigate to the folder containing the .exe file for the service and use the command: installutil.exe ScheduleRecordingService.exe
 
