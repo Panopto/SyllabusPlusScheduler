@@ -39,7 +39,7 @@
             // 
             // PanoptoScheduleRecordingServiceInstaller
             // 
-            this.PanoptoScheduleRecordingServiceInstaller.Description = "Schedules Remote Recordering";
+            this.PanoptoScheduleRecordingServiceInstaller.Description = "Schedules Remote Recordings";
             this.PanoptoScheduleRecordingServiceInstaller.DisplayName = "Schedule Recording Service";
             this.PanoptoScheduleRecordingServiceInstaller.ServiceName = "Panopto Schedule Recording Service";
             // 
