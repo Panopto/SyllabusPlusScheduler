@@ -66,6 +66,7 @@ namespace SyllabusPlusSchedulerService
         /// <param name="e"></param>
         private void ScheduleCallback(object e)
         {
+            log.Debug("Attempting sync at: " + DateTime.Now.ToString());
             if (!isRunning)
             {
                 lock (thisLock)
@@ -75,6 +76,11 @@ namespace SyllabusPlusSchedulerService
                     this.isRunning = false;
                 }
             }
+            else
+            {
+                log.Error("Sync could not be started. Previous sync is still running.");
+            }
+            log.Debug("Sync completed at: " + DateTime.Now.ToString());
         }
 
         /// <summary>
@@ -82,6 +88,7 @@ namespace SyllabusPlusSchedulerService
         /// </summary>
         private void ScheduleRecordings()
         {
+            log.Debug("Sync started at: " + DateTime.Now.ToString());
             try
             {
                 Schedule schedule = null;
@@ -114,10 +121,12 @@ namespace SyllabusPlusSchedulerService
                                         // Schedule session id will determine if need to create or update/delete the corresponding schedule
                                         if (schedule.ScheduledSessionId == null || schedule.ScheduledSessionId == Guid.Empty)
                                         {
+                                            log.Debug(schedule.SessionName + " is not associated with a session on the Panopto database. Attempting to schedule.");
                                             result = remoteRecorderManagementWrapper.ScheduleRecording(schedule);
                                         }
                                         else
                                         {
+                                            log.Debug(schedule.SessionName + " is already associated with a session on the Panopto database. Attempting to update schedule.");
                                             result = remoteRecorderManagementWrapper.UpdateRecordingTime(schedule);
                                         }
                                     }
@@ -126,20 +135,27 @@ namespace SyllabusPlusSchedulerService
 
                                     if (!result.ConflictsExist)
                                     {
+                                        log.Debug(schedule.SessionName + " sync succeeded.");
                                         // Should only be 1 valid Session ID and never null
                                         schedule.ScheduledSessionId = result.SessionIDs.FirstOrDefault();
                                         schedule.NumberOfAttempts = 0;
+                                        schedule.ErrorResponse = null;
                                     }
                                     else
                                     {
                                         schedule.ErrorResponse = this.xmlScheduledRecordingHelper.SerializeXMLToString(result);
                                         schedule.NumberOfAttempts++;
+                                        if (schedule.NumberOfAttempts >= MAX_ATTEMPTS)
+                                        {
+                                            log.Error(schedule.SessionName + " failed to sync.");
+                                        }
                                     }
                                 }
 
                                 // Cancel Schedule has been requested and not succeeded
                                 else if (schedule.CancelSchedule == false)
                                 {
+                                    log.Debug("Cancelling " + schedule.SessionName);
                                     using (SessionManagementWrapper sessionManagementWrapper
                                         = new SessionManagementWrapper(
                                             this.configSettings.PanoptoSite,
@@ -150,6 +166,7 @@ namespace SyllabusPlusSchedulerService
                                         schedule.CancelSchedule = true;
                                         schedule.PanoptoSyncSuccess = true;
                                         schedule.NumberOfAttempts = 0;
+                                        schedule.ErrorResponse = null;
                                     }
                                 }
 
