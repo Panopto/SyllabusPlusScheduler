@@ -98,16 +98,26 @@ namespace SyllabusPlusSchedulerService
                     using (SyllabusPlusDBContext db = new SyllabusPlusDBContext())
                     {
                         schedule =
-                            db.SchedulesTable.Select(s => s).
-                                Where(  s => (s.LastUpdate > s.LastPanoptoSync && s.PanoptoSyncSuccess == true)
-                                    ||  s.PanoptoSyncSuccess == null
-                                    || (s.PanoptoSyncSuccess == false && s.NumberOfAttempts < MAX_ATTEMPTS)).
-                                OrderBy(s => s.LastUpdate).FirstOrDefault();
+                            db.SchedulesTable.Select(s => s)
+                                .Where(s => !s.LastPanoptoSync.HasValue
+                                            || (s.LastUpdate > s.LastPanoptoSync.Value
+                                                && s.PanoptoSyncSuccess.HasValue && s.PanoptoSyncSuccess.Value)
+                                            || !s.PanoptoSyncSuccess.HasValue
+                                            || (!s.PanoptoSyncSuccess.Value
+                                                && s.NumberOfAttempts < MAX_ATTEMPTS))
+                              .OrderBy(s => s.LastUpdate).FirstOrDefault();
 
                         try
                         {
                             if (schedule != null)
                             {
+                                log.Debug(
+                                    String.Format("Attempting to sync a session. Name: {0}, Last update: {1}, Last Panopto sync: {2}, Panopto sync success: {3}, Number of attempts: {4}",
+                                                  schedule.SessionName,
+                                                  schedule.LastUpdate,
+                                                  (schedule.LastPanoptoSync != null) ? (DateTime?) schedule.LastPanoptoSync.Value : null,
+                                                  schedule.PanoptoSyncSuccess,
+                                                  schedule.NumberOfAttempts));
                                 if (!schedule.CancelSchedule.HasValue)
                                 {
                                     ScheduledRecordingResult result = null;
@@ -140,6 +150,12 @@ namespace SyllabusPlusSchedulerService
                                         schedule.ScheduledSessionId = result.SessionIDs.FirstOrDefault();
                                         schedule.NumberOfAttempts = 0;
                                         schedule.ErrorResponse = null;
+
+                                        if (schedule.LastUpdate > DateTime.UtcNow)
+                                        {
+                                            // In the rare case that the LastUpdateTime was in the future, set it to now, to ensure we don't repeat sync
+                                            schedule.LastUpdate = DateTime.UtcNow;
+                                        }
                                     }
                                     else
                                     {
@@ -175,14 +191,32 @@ namespace SyllabusPlusSchedulerService
                         }
                         catch (Exception ex)
                         {
-                            log.Error(ex.Message, ex);
+                            log.Error("Error syncing schedule " + ex.ToString(), ex);
                             schedule.ErrorResponse = ex.Message;
                             schedule.PanoptoSyncSuccess = false;
                             schedule.NumberOfAttempts++;
                         }
 
-                        // Save after every iteration to prevent scheduling not being insync with Panopto Server
-                        db.SaveChanges();
+                        try
+                        {
+                            if (schedule != null)
+                            {
+                                log.Debug(
+                                    String.Format("Attempting to save schedule back to database. Name: {0}, Last update: {1}, Last Panopto sync: {2}, Panopto sync success: {3}, Number of attempts: {4}",
+                                                  schedule.SessionName,
+                                                  schedule.LastUpdate,
+                                                  (schedule.LastPanoptoSync != null) ? (DateTime?)schedule.LastPanoptoSync.Value : null,
+                                                  schedule.PanoptoSyncSuccess,
+                                                  schedule.NumberOfAttempts));
+
+                                // Save after every iteration to prevent scheduling not being insync with Panopto Server
+                                db.SaveChanges();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            log.Error("Error saving to database " + ex.ToString(), ex);
+                        }
                     }
                 } while (schedule != null);
             }
