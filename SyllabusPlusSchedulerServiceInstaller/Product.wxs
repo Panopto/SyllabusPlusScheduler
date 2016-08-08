@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-	<Product Id="*" Name="Syllabus Plus Scheduler Service" Language="1033" Version="1.0.0.0" Manufacturer="Panopto" UpgradeCode="5b8ba71b-1624-4381-89dd-0c8644826326">
+	<Product Id="*" Name="Panopto Syllabus Plus Scheduler Service" Language="1033" Version="1.0.1.0" Manufacturer="Panopto" UpgradeCode="5b8ba71b-1624-4381-89dd-0c8644826326">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of Syllabus Plus Scheduler Service is already installed." />
@@ -90,7 +90,7 @@
 					Vital="yes"
 					Name="Syllabus Plus Scheduler Service"
 					DisplayName="Panopto Syllabus Plus Scheduler Service"
-					Description="Schedules Remote Recordering"
+					Description="Schedules remote recordings"
 					Start="auto"
 					Account="LocalSystem"
 					ErrorControl="ignore"
