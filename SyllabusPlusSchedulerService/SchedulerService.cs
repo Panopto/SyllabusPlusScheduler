@@ -99,12 +99,13 @@ namespace SyllabusPlusSchedulerService
                     {
                         schedule =
                             db.SchedulesTable.Select(s => s)
-                                .Where(s => !s.LastPanoptoSync.HasValue
+                                .Where(s => (!s.LastPanoptoSync.HasValue
                                             || (s.LastUpdate > s.LastPanoptoSync.Value
                                                 && s.PanoptoSyncSuccess.HasValue && s.PanoptoSyncSuccess.Value)
                                             || !s.PanoptoSyncSuccess.HasValue
                                             || (!s.PanoptoSyncSuccess.Value
                                                 && s.NumberOfAttempts < MAX_ATTEMPTS))
+                                            && s.StartTime > DateTime.Now) // only schedule recordings in the future
                               .OrderBy(s => s.LastUpdate).FirstOrDefault();
 
                         try
