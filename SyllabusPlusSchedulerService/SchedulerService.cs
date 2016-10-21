@@ -99,12 +99,10 @@ namespace SyllabusPlusSchedulerService
                     {
                         schedule =
                             db.SchedulesTable.Select(s => s)
-                                .Where(s => !s.LastPanoptoSync.HasValue
-                                            || (s.LastUpdate > s.LastPanoptoSync.Value
-                                                && s.PanoptoSyncSuccess.HasValue && s.PanoptoSyncSuccess.Value)
-                                            || !s.PanoptoSyncSuccess.HasValue
-                                            || (!s.PanoptoSyncSuccess.Value
-                                                && s.NumberOfAttempts < MAX_ATTEMPTS))
+                                .Where(s => (s.NumberOfAttempts < MAX_ATTEMPTS 
+                                            && (!s.LastPanoptoSync.HasValue
+                                                || s.LastUpdate > s.LastPanoptoSync.Value
+                                                || !s.PanoptoSyncSuccess.HasValue)))
                               .OrderBy(s => s.LastUpdate).FirstOrDefault();
 
                         try

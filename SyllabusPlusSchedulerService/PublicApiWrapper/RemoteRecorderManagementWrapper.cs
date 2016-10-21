@@ -108,7 +108,7 @@ namespace SyllabusPlusSchedulerService.PublicApiWrapper
                                         {
                                             RecorderId = primaryRemoteRecorderId,
                                             SuppressPrimary = false,
-                                            SuppressSecondary = true
+                                            SuppressSecondary = false
                                         }
                                      );
             }
