@@ -99,8 +99,8 @@ namespace SyllabusPlusSchedulerService
             {
                 // If folder with specified ID can't be found, set folder ID to Guid.Empty to create the recording in the Remote Recorder default folder.
                 log.Error(String.Format("Can't find folder with ID {0} in the Panopto database.", schedule.FolderId), e);
-                log.Warn("Recording will be scheduled in the Remote Recorder's default folder.");
-                schedule.FolderId = Guid.Empty;
+                log.Warn(String.Format("Recording will be scheduled in folder with ID {0}.", this.configSettings.PanoptoDefaultFolder));
+                schedule.FolderId = this.configSettings.PanoptoDefaultFolder;
             }
             return remoteRecorderManagementWrapper.ScheduleRecording(schedule);
         }
