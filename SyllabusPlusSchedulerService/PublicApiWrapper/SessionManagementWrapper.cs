@@ -62,6 +62,34 @@ namespace SyllabusPlusSchedulerService.PublicApiWrapper
         }
 
         /// <summary>
+        /// Gets a folder by ID
+        /// </summary>
+        /// <param name="folderId">Folder ID</param>
+        public Folder GetFolderById(Guid folderId)
+        {
+            return this.sessionManagement.GetFoldersById(this.authentication, new Guid[] { folderId }).First<Folder>();
+        }
+
+        /// <summary>
+        /// Gets a session by ID
+        /// </summary>
+        /// <param name="sessionId">Session ID</param>
+        public Session GetSessionById(Guid sessionId)
+        {
+            return this.sessionManagement.GetSessionsById(this.authentication, new Guid[] { sessionId }).First<Session>();
+        }
+
+        /// <summary>
+        /// Updates the session name. No-op if the Guid is null.
+        /// </summary>
+        /// <param name="sessionId">Session to update</param>
+        /// <param name="name">New name for the session</param>
+        public void UpdateSessionName(Guid sessionId, string name)
+        {
+            this.sessionManagement.UpdateSessionName(this.authentication, sessionId, name);
+        }
+
+        /// <summary>
         /// Clean up object
         /// </summary>
         public void Dispose()
