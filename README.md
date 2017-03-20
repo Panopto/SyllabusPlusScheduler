@@ -5,7 +5,8 @@ The Panopto Syllabus Plus Scheduler service queries a table of scheduled events 
 * The service periodically checks the specified database's "Schedules" table to determine if any new or updated entries have been added. The sync interval is a configurable setting.
 * When the service finds a new scheduled event row that needs to be created in Panopto, it calls the Panopto SOAP API to create the scheduled recording with the specified session name, folder, remote recorder, start time, duration and whether the session is a webcast or just a regular recording.
   * Optionally, you can also specify a secondary remote recorder (for rooms equipped with two remote recorders) and the presenter's username. Note that if you omit the presenter's username, the scheduled recording's owner in Panopto will be the remote recorder service.
-* When the service finds an existing scheduled event row that needs to be updated, it calls the API to update the start time and/or duration. Note that currently any changes to rename the session, change the presenter's username, change the folder, or any other information will not be sync'ed after the recording has been scheduled. For now, please make these changes manually through the Panopto web application.
+* When the service finds an existing scheduled event row that needs to be updated, it calls the API to update the start time, duration, or session name. Note that currently any changes to change the presenter's username, change the folder, or any other information will not be sync'ed after the recording has been scheduled. For now, please make these changes manually through the Panopto web application.
+* When the service finds an existing scheduled event row that has an updated remote recorder ID, the original session will be deleted and a new session will be scheduled for the updated remote recorder.
 * When the service finds an existing scheduled event row that needs to be cancelled (based on if the cancel schedule flag is set), the service will cancel the scheduled recording in Panopto.
 
 ## How do I set this up?
@@ -19,7 +20,7 @@ The Panopto Syllabus Plus Scheduler service queries a table of scheduled events 
 2. Open a command prompt with administrator privileges.
 3. Run the installer with the following command:
 ```
-ScheduleRecordingServiceInstaller.msi PANOPTOSERVERNAME=<Panopto Servername> USERNAME=<Panopto Username> PASSWORD=<Panopto Password> SYNCINTERVAL=<Sync Interval in minutes> DBSERVER=<Location of database server> DBNAME=<Name of database>
+ScheduleRecordingServiceInstaller.msi PANOPTOSERVERNAME=<Panopto Servername> USERNAME=<Panopto Username> PASSWORD=<Panopto Password> SYNCINTERVAL=<Sync Interval in minutes> DEFAULTFOLDER=<Folder ID to use if the folder specified in the DB row is invalid> DBSERVER=<Location of database server> DBNAME=<Name of database>
 ```
 Note that the account provided for the username and password must have access to the remote recorders. We recommend that you create a separate Panopto administrator account specifically for this service.
 
@@ -34,6 +35,7 @@ You can change configuration after you have installed the service by directly ed
     <add key="PanoptoUserName" value="<Panopto Username>"/>
     <add key="PanoptoPassword" value="<Panopto Password>"/>
     <add key="SyncInterval" value="<Sync Interval in minutes>"/><!--In minutes-->
+    <add key="PanoptoDefaultFolder" value="<Panopto Folder ID>"/>
 </appSettings>
 <connectionStrings>
     <add name="SyllabusPlusDBContext" connectionString="Data Source=<Location of database server>;Initial Catalog=<Name of database>;Integrated Security=True" providerName="System.Data.SqlClient"/>
