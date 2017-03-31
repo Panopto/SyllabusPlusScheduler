@@ -71,7 +71,17 @@
                 Value="[SYNCINTERVAL]"
                 SelectionLanguage="XPath"
                 Sequence = "4"/>
-      
+
+        <!-- Update Sync Interval Time (Default will be set in code)-->
+        <util:XmlFile Id="UpdateDefaultFolder"
+                Action="setValue"
+                Permanent="yes"
+                File="[#ScheduleRecordingServices.exe.config]"
+                ElementPath="//appSettings/add[\[]@key=&apos;PanoptoDefaultFolder&apos;[\]]/@value"
+                Value="[DEFAULTFOLDER]"
+                SelectionLanguage="XPath"
+                Sequence = "5"/>
+
         <!-- Update a DB Connection string-->
         <util:XmlFile Id="UpdateConnectionString"
                 Action="setValue"
@@ -80,7 +90,7 @@
                 ElementPath="/configuration/connectionStrings/add[\[]@name=&apos;SyllabusPlusDBContext&apos;[\]]/@connectionString"
                 Value="Data Source=[DBSERVER];Initial Catalog=[DBNAME];Integrated Security=True"
                 SelectionLanguage="XPath"
-                Sequence = "5"/>
+                Sequence = "6"/>
       </Component>
       <Component Id="ProductComponent" Guid="ACCCBD4F-D927-4F17-A130-BE334FF138B7">
         <File Id="ScheduleRecordingServices.exe" Name="ScheduleRecordingServices.exe" Source="..\SyllabusPlusSchedulerService\bin\Release\SyllabusPlusSchedulerService.exe" Vital="yes" KeyPath="yes" DiskId="1"/>

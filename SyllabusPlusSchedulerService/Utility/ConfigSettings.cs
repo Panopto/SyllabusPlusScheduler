@@ -30,6 +30,11 @@ namespace SyllabusPlusSchedulerService.Utility
         public int SyncIntervalInMinutes { get; private set; }
 
         /// <summary>
+        /// Default folder to use if the specified folder doesn't exist yet or isn't populated
+        /// </summary>
+        public Guid PanoptoDefaultFolder { get; private set; }
+
+        /// <summary>
         /// ConfigSettings constructor that gets settings from the config
         /// Note: Exceptions are not handled
         /// </summary>
@@ -38,6 +43,7 @@ namespace SyllabusPlusSchedulerService.Utility
             this.PanoptoSite = ConfigurationManager.AppSettings["PanoptoSite"];
             this.PanoptoUserName = ConfigurationManager.AppSettings["PanoptoUserName"];
             this.PanoptoPassword = ConfigurationManager.AppSettings["PanoptoPassword"];
+            this.PopulateDefaultFolder();
             this.PopulateSyncInterval();
 
         }
@@ -56,6 +62,22 @@ namespace SyllabusPlusSchedulerService.Utility
             {
                 // Default to 60
                 this.SyncIntervalInMinutes = 60;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to populate the Panopto Default Folder from App.Config. Defaults to Guid.Empty
+        /// </summary>
+        private void PopulateDefaultFolder()
+        {
+            Guid defaultFolder;
+            if (Guid.TryParse(ConfigurationManager.AppSettings["PanoptoDefaultFolder"], out defaultFolder))
+            {
+                this.PanoptoDefaultFolder = defaultFolder;
+            }
+            else
+            {
+                this.PanoptoDefaultFolder = Guid.Empty;
             }
         }
     }

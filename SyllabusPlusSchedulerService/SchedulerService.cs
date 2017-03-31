@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using SyllabusPlusSchedulerService.RemoteRecorderManagement;
+using SyllabusPlusSchedulerService.SessionManagement;
 using SyllabusPlusSchedulerService.Log;
 using SyllabusPlusSchedulerService.DB;
 using SyllabusPlusSchedulerService.Utility;
@@ -36,7 +37,8 @@ namespace SyllabusPlusSchedulerService
         /// </summary>
         public void OnDebug()
         {
-            this.OnStart(null);
+            // Attempt to run a single sync for debug purposes.
+            this.ScheduleRecordings();
         }
 
         /// <summary>
@@ -84,6 +86,26 @@ namespace SyllabusPlusSchedulerService
         }
 
         /// <summary>
+        /// Verify the folder exists before scheduling a recording. If not, put in RR's default folder (just set folder GUID to empty).
+        /// </summary>
+        private ScheduledRecordingResult VerifyFolderAndScheduleRecording(SessionManagementWrapper sessionManagementWrapper, Schedule schedule, RemoteRecorderManagementWrapper remoteRecorderManagementWrapper)
+        {
+            // Verify the folder exists before trying to schedule a recording
+            try
+            {
+                sessionManagementWrapper.GetFolderById(schedule.FolderId);
+            }
+            catch (Exception e)
+            {
+                // If folder with specified ID can't be found, set folder ID to Guid.Empty to create the recording in the Remote Recorder default folder.
+                log.Error(String.Format("Can't find folder with ID {0} in the Panopto database.", schedule.FolderId), e);
+                log.Warn(String.Format("Recording will be scheduled in folder with ID {0}.", this.configSettings.PanoptoDefaultFolder));
+                schedule.FolderId = this.configSettings.PanoptoDefaultFolder;
+            }
+            return remoteRecorderManagementWrapper.ScheduleRecording(schedule);
+        }
+
+        /// <summary>
         /// Makes a SOAP api call to schedule a recording
         /// </summary>
         private void ScheduleRecordings()
@@ -125,27 +147,62 @@ namespace SyllabusPlusSchedulerService
                                             this.configSettings.PanoptoSite,
                                             this.configSettings.PanoptoUserName,
                                             this.configSettings.PanoptoPassword))
+                                    using (SessionManagementWrapper sessionManagementWrapper
+                                        = new SessionManagementWrapper(
+                                        this.configSettings.PanoptoSite,
+                                        this.configSettings.PanoptoUserName,
+                                        this.configSettings.PanoptoPassword))
                                     {
                                         // Schedule session id will determine if need to create or update/delete the corresponding schedule
                                         if (schedule.ScheduledSessionId == null || schedule.ScheduledSessionId == Guid.Empty)
                                         {
                                             log.Debug(schedule.SessionName + " is not associated with a session on the Panopto database. Attempting to schedule.");
-                                            result = remoteRecorderManagementWrapper.ScheduleRecording(schedule);
+                                            result = VerifyFolderAndScheduleRecording(sessionManagementWrapper, schedule, remoteRecorderManagementWrapper);
                                         }
                                         else
                                         {
                                             log.Debug(schedule.SessionName + " is already associated with a session on the Panopto database. Attempting to update schedule.");
-                                            result = remoteRecorderManagementWrapper.UpdateRecordingTime(schedule);
+                                            Session scheduledSession = sessionManagementWrapper.GetSessionById((Guid)schedule.ScheduledSessionId);
+
+                                            // Check if either the primary or secondary remote recorder changed. If so, delete the old session and create a new session.
+                                            if (schedule.PrimaryRemoteRecorderId != scheduledSession.RemoteRecorderIds[0]
+                                                || (scheduledSession.RemoteRecorderIds.Length > 1 && schedule.SecondaryRemoteRecorderId != scheduledSession.RemoteRecorderIds[1]))
+                                            {
+                                                log.Debug(schedule.SessionName + " has a different remote recorder. Moving the recording by deleting the existing scheduled session and creating a new scheduled session.");
+                                                sessionManagementWrapper.DeleteSessions((Guid)schedule.ScheduledSessionId);
+                                                // Reset the ScheduledSessionId in the DB just in case rescheduling the session fails the first time.
+                                                schedule.ScheduledSessionId = null;
+                                                result = VerifyFolderAndScheduleRecording(sessionManagementWrapper, schedule, remoteRecorderManagementWrapper);
+                                            }
+                                            else
+                                            { 
+                                                // Check if name was updated in DB. If so, update the session name on the server.
+                                                if (scheduledSession.Name != schedule.SessionName)
+                                                {
+                                                    log.Debug(String.Format("Updating the session name from {0} to {1}.", scheduledSession.Name, schedule.SessionName));
+                                                    sessionManagementWrapper.UpdateSessionName((Guid)schedule.ScheduledSessionId, schedule.SessionName);
+                                                }
+                                                // Check if start time was updated in DB. If so, update the start time on the server. Could fail if there is a conflict.
+                                                if (scheduledSession.StartTime != schedule.StartTime)
+                                                {
+                                                    log.Debug("Updating the scheduled session's start time.");
+                                                    result = remoteRecorderManagementWrapper.UpdateRecordingTime(schedule);
+                                                }
+                                            }
                                         }
                                     }
 
-                                    schedule.PanoptoSyncSuccess = !result.ConflictsExist;
-
-                                    if (!result.ConflictsExist)
+                                    // If just updating the session name, the ScheduleRecordingResult object will be null.
+                                    schedule.PanoptoSyncSuccess = result != null ? !result.ConflictsExist : true;
+                                    
+                                    if ((bool)schedule.PanoptoSyncSuccess)
                                     {
                                         log.Debug(schedule.SessionName + " sync succeeded.");
-                                        // Should only be 1 valid Session ID and never null
-                                        schedule.ScheduledSessionId = result.SessionIDs.FirstOrDefault();
+                                        // Should only be 1 valid Session ID. ScheduleRecordingResult could be null if just updating the session name.
+                                        if (result != null)
+                                        { 
+                                            schedule.ScheduledSessionId = result.SessionIDs.FirstOrDefault();
+                                        }
                                         schedule.NumberOfAttempts = 0;
                                         schedule.ErrorResponse = null;
 
