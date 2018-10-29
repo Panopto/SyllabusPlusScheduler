@@ -57,12 +57,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PublicApiWrapper\SessionManagementWrapper.cs" />
+    <Compile Include="PublicApiWrapper\UserManagementWrapper.cs" />
     <Compile Include="Service References\RemoteRecorderManagement\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Service References\SessionManagement\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\UserManagement\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -93,6 +99,31 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Service References\UserManagement\SyllabusPlusSchedulerService.UserManagement.Group.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\UserManagement\SyllabusPlusSchedulerService.UserManagement.ListGroupsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\UserManagement\SyllabusPlusSchedulerService.UserManagement.ListUsersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\UserManagement\SyllabusPlusSchedulerService.UserManagement.User.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\UserManagement\UserManagement.wsdl" />
+    <None Include="Service References\UserManagement\UserManagement.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UserManagement\UserManagement1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UserManagement\UserManagement2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UserManagement\UserManagement3.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -108,6 +139,22 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\RemoteRecorderManagement\" />
     <WCFMetadataStorage Include="Service References\SessionManagement\" />
+    <WCFMetadataStorage Include="Service References\UserManagement\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UserManagement\UserManagement.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UserManagement\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UserManagement\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UserManagement\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

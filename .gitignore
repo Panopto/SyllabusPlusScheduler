@@ -1,0 +1,84 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/SyllabusPlusSchedulerServiceInstaller/obj/Release/SyllabusPlusSchedulerServiceInstaller.wixproj.FileList.txt
+/SyllabusPlusSchedulerServiceInstaller/obj/Release/SyllabusPlusSchedulerServiceInstaller.wixproj.BindOutputsFileListnull.txt
+/SyllabusPlusSchedulerServiceInstaller/obj/Release/SyllabusPlusSchedulerServiceInstaller.wixproj.BindContentsFileListnull.txt
+/SyllabusPlusSchedulerServiceInstaller/obj/Release/SyllabusPlusSchedulerServiceInstaller.wixproj.BindBuiltOutputsFileListnull.txt
+/SyllabusPlusSchedulerServiceInstaller/obj/Release/Product.wixobj
+/SyllabusPlusSchedulerServiceInstaller/obj/Debug/SyllabusPlusSchedulerServiceInstaller.wixproj.FileList.txt
+/SyllabusPlusSchedulerServiceInstaller/obj/Debug/Product.wixobj
+/SyllabusPlusSchedulerServiceInstaller/bin/Release/ScheduleRecordingServiceInstaller.wixpdb
+/SyllabusPlusSchedulerServiceInstaller/bin/Release/ScheduleRecordingServiceInstaller.msi
+/SyllabusPlusSchedulerService/Service References/UserManagement/UserManagement3.xsd
+/SyllabusPlusSchedulerService/Service References/UserManagement/UserManagement2.xsd
+/SyllabusPlusSchedulerService/Service References/UserManagement/UserManagement1.xsd
+/SyllabusPlusSchedulerService/Service References/UserManagement/UserManagement.xsd
+/SyllabusPlusSchedulerService/Service References/UserManagement/UserManagement.wsdl
+/SyllabusPlusSchedulerService/Service References/UserManagement/UserManagement.disco
+/SyllabusPlusSchedulerService/Service References/UserManagement/SyllabusPlusSchedulerService.UserManagement.User.datasource
+/SyllabusPlusSchedulerService/Service References/UserManagement/SyllabusPlusSchedulerService.UserManagement.ListUsersResponse.datasource
+/SyllabusPlusSchedulerService/Service References/UserManagement/SyllabusPlusSchedulerService.UserManagement.ListGroupsResponse.datasource
+/SyllabusPlusSchedulerService/Service References/UserManagement/SyllabusPlusSchedulerService.UserManagement.Group.datasource
+/SyllabusPlusSchedulerService/Service References/UserManagement/Reference.svcmap
+/SyllabusPlusSchedulerService/Service References/UserManagement/Reference.cs
+/SyllabusPlusSchedulerService/Service References/UserManagement/configuration91.svcinfo
+/SyllabusPlusSchedulerService/Service References/UserManagement/configuration.svcinfo
+/SyllabusPlusSchedulerService/obj/Release/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
+/SyllabusPlusSchedulerService/obj/Release/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+/SyllabusPlusSchedulerService/obj/Release/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+/SyllabusPlusSchedulerService/obj/Release/SyllabusPlusSchedulerService.ProjectInstaller.resources
+/SyllabusPlusSchedulerService/obj/Release/SyllabusPlusSchedulerService.pdb
+/SyllabusPlusSchedulerService/obj/Release/SyllabusPlusSchedulerService.exe
+/SyllabusPlusSchedulerService/obj/Release/SyllabusPlusSchedulerService.csprojAssemblyReference.cache
+/SyllabusPlusSchedulerService/obj/Release/SyllabusPlusSchedulerService.csproj.GenerateResource.cache
+/SyllabusPlusSchedulerService/obj/Release/SyllabusPlusSchedulerService.csproj.FileListAbsolute.txt
+/SyllabusPlusSchedulerService/obj/Release/SyllabusPlusSchedulerService.csproj.CoreCompileInputs.cache
+/SyllabusPlusSchedulerService/obj/Release/SyllabusPlusSchedulerService.csproj.CopyComplete
+/SyllabusPlusSchedulerService/obj/Release/TempPE/Service References.UserManagement.Reference.cs.dll
+/SyllabusPlusSchedulerService/obj/Release/TempPE/Service References.SessionManagement.Reference.cs.dll
+/SyllabusPlusSchedulerService/obj/Release/TempPE/Service References.RemoteRecorderManagement.Reference.cs.dll
+/SyllabusPlusSchedulerService/obj/Release/TempPE
+/SyllabusPlusSchedulerService/obj/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
+/SyllabusPlusSchedulerService/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+/SyllabusPlusSchedulerService/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+/SyllabusPlusSchedulerService/obj/Debug/SyllabusPlusSchedulerService.ProjectInstaller.resources
+/SyllabusPlusSchedulerService/obj/Debug/SyllabusPlusSchedulerService.pdb
+/SyllabusPlusSchedulerService/obj/Debug/SyllabusPlusSchedulerService.exe
+/SyllabusPlusSchedulerService/obj/Debug/SyllabusPlusSchedulerService.csprojAssemblyReference.cache
+/SyllabusPlusSchedulerService/obj/Debug/SyllabusPlusSchedulerService.csproj.GenerateResource.cache
+/SyllabusPlusSchedulerService/obj/Debug/SyllabusPlusSchedulerService.csproj.FileListAbsolute.txt
+/SyllabusPlusSchedulerService/obj/Debug/SyllabusPlusSchedulerService.csproj.CoreCompileInputs.cache
+/SyllabusPlusSchedulerService/obj/Debug/SyllabusPlusSchedulerService.csproj.CopyComplete
+/SyllabusPlusSchedulerService/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/SyllabusPlusSchedulerService/obj/Debug/DesignTimeResolveAssemblyReferences.cache
+/SyllabusPlusSchedulerService/bin/Release/SyllabusPlusSchedulerService.pdb
+/SyllabusPlusSchedulerService/bin/Release/SyllabusPlusSchedulerService.exe.config
+/SyllabusPlusSchedulerService/bin/Release/SyllabusPlusSchedulerService.exe
+/SyllabusPlusSchedulerService/bin/Release/EntityFramework.xml
+/SyllabusPlusSchedulerService/bin/Release/EntityFramework.SqlServer.xml
+/SyllabusPlusSchedulerService/bin/Release/EntityFramework.SqlServer.dll
+/SyllabusPlusSchedulerService/bin/Release/EntityFramework.dll
+/SyllabusPlusSchedulerService/bin/Release
+/SyllabusPlusSchedulerService/bin/Debug/SyllabusPlusSchedulerService.pdb
+/SyllabusPlusSchedulerService/bin/Debug/SyllabusPlusSchedulerService.exe.config
+/SyllabusPlusSchedulerService/bin/Debug/SyllabusPlusSchedulerService.exe
+/SyllabusPlusSchedulerService/bin/Debug/EntityFramework.xml
+/SyllabusPlusSchedulerService/bin/Debug/EntityFramework.SqlServer.xml
+/SyllabusPlusSchedulerService/bin/Debug/EntityFramework.SqlServer.dll
+/SyllabusPlusSchedulerService/bin/Debug/EntityFramework.dll
+/.vs/VSWorkspaceState.json
+/.vs/SyllabusPlusSchedulerService/v15/Server/sqlite3/storage.ide-wal
+/.vs/SyllabusPlusSchedulerService/v15/Server/sqlite3/storage.ide-shm
+/.vs/SyllabusPlusSchedulerService/v15/Server/sqlite3/storage.ide
+/.vs/SyllabusPlusSchedulerService/v15/Server/sqlite3/db.lock
+/.vs/SyllabusPlusSchedulerService/v15/Server/sqlite3
+/.vs/SyllabusPlusSchedulerService/v15/.suo
+/.vs/SyllabusPlusSchedulerService/v15
+/.vs/SyllabusPlusScheduler/v15/.suo
+/.vs/slnx.sqlite
+/.vs/ProjectSettings.json
+/SyllabusPlusSchedulerService/obj/Debug/TempPE/Service References.UserManagement.Reference.cs.dll
+/SyllabusPlusSchedulerService/obj/Debug/TempPE/Service References.SessionManagement.Reference.cs.dll
+/SyllabusPlusSchedulerService/obj/Debug/TempPE/Service References.RemoteRecorderManagement.Reference.cs.dll

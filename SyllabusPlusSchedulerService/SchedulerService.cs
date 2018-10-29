@@ -105,6 +105,23 @@ namespace SyllabusPlusSchedulerService
             return remoteRecorderManagementWrapper.ScheduleRecording(schedule);
         }
 
+        private bool CheckUsernameAndUpdateOwner(UserManagementWrapper userManagementWrapper, SessionManagementWrapper sessionManagementWrapper ,string Username, Guid sessionid)
+        {
+          
+               Guid userid =  userManagementWrapper.GetUserIdByName(Username);
+            log.Warn($"{userid}");
+            if (userid == null)
+            {
+                log.Error(String.Format("Can't find user named {0} in the Panopto database.", Username));
+                log.Warn(String.Format("Recording will be scheduled with the service account as the owner: {0}.", this.configSettings.PanoptoUserName));
+                return false;
+            }
+            else
+            {
+                return sessionManagementWrapper.UpdateSessionOwner(sessionid, Username);
+            }
+        }
+
         /// <summary>
         /// Makes a SOAP api call to schedule a recording
         /// </summary>
@@ -152,12 +169,20 @@ namespace SyllabusPlusSchedulerService
                                         this.configSettings.PanoptoSite,
                                         this.configSettings.PanoptoUserName,
                                         this.configSettings.PanoptoPassword))
+                                    using (UserManagementWrapper userManagementWrapper
+                                        = new UserManagementWrapper(
+                                        this.configSettings.PanoptoSite,
+                                        this.configSettings.PanoptoUserName,
+                                        this.configSettings.PanoptoPassword))
+
+
                                     {
                                         // Schedule session id will determine if need to create or update/delete the corresponding schedule
                                         if (schedule.ScheduledSessionId == null || schedule.ScheduledSessionId == Guid.Empty)
                                         {
                                             log.Debug(schedule.SessionName + " is not associated with a session on the Panopto database. Attempting to schedule.");
                                             result = VerifyFolderAndScheduleRecording(sessionManagementWrapper, schedule, remoteRecorderManagementWrapper);
+
                                         }
                                         else
                                         {
@@ -175,7 +200,7 @@ namespace SyllabusPlusSchedulerService
                                                 result = VerifyFolderAndScheduleRecording(sessionManagementWrapper, schedule, remoteRecorderManagementWrapper);
                                             }
                                             else
-                                            { 
+                                            {
                                                 // Check if name was updated in DB. If so, update the session name on the server.
                                                 if (scheduledSession.Name != schedule.SessionName)
                                                 {
@@ -188,39 +213,74 @@ namespace SyllabusPlusSchedulerService
                                                     log.Debug("Updating the scheduled session's start time.");
                                                     result = remoteRecorderManagementWrapper.UpdateRecordingTime(schedule);
                                                 }
+
+                                                if (scheduledSession.Duration != Convert.ToDouble(schedule.Duration)*60)
+                                                {
+                                                    log.Debug("Updating the scheduled duration.");
+                                                    log.Debug($"Old duration in seconds {scheduledSession.Duration}, New duration in seconds {Convert.ToDouble(schedule.Duration)}*60");
+                                                    result = remoteRecorderManagementWrapper.UpdateRecordingTime(schedule);
+                                                }
+                                                if (schedule.PresenterUsername != null)
+                                                {
+                                                    log.Debug("Updating the session owner.");
+                                                    bool Username =   CheckUsernameAndUpdateOwner(userManagementWrapper, sessionManagementWrapper, schedule.PresenterUsername, (Guid)schedule.ScheduledSessionId);
+                                                    if (Username == true)
+                                                    { log.Debug(schedule.SessionName + " has had owner updated to " + schedule.PresenterUsername); }
+                                                    else
+                                                    { schedule.ErrorResponse = "Owner update failed. Username:" + schedule.PresenterUsername + "could not be located"; }
+                                                }
                                             }
                                         }
                                     }
 
                                     // If just updating the session name, the ScheduleRecordingResult object will be null.
                                     schedule.PanoptoSyncSuccess = result != null ? !result.ConflictsExist : true;
-                                    
-                                    if ((bool)schedule.PanoptoSyncSuccess)
-                                    {
-                                        log.Debug(schedule.SessionName + " sync succeeded.");
-                                        // Should only be 1 valid Session ID. ScheduleRecordingResult could be null if just updating the session name.
-                                        if (result != null)
-                                        { 
-                                            schedule.ScheduledSessionId = result.SessionIDs.FirstOrDefault();
-                                        }
-                                        schedule.NumberOfAttempts = 0;
-                                        schedule.ErrorResponse = null;
+                                    using (UserManagementWrapper userManagementWrapper
+                                   = new UserManagementWrapper(
+                                   this.configSettings.PanoptoSite,
+                                   this.configSettings.PanoptoUserName,
+                                   this.configSettings.PanoptoPassword))
 
-                                        if (schedule.LastUpdate > DateTime.UtcNow)
+                                    using (SessionManagementWrapper sessionManagementWrapper
+                                   = new SessionManagementWrapper(
+                                   this.configSettings.PanoptoSite,
+                                   this.configSettings.PanoptoUserName,
+                                   this.configSettings.PanoptoPassword))
+
+                                        if ((bool)schedule.PanoptoSyncSuccess)
                                         {
-                                            // In the rare case that the LastUpdateTime was in the future, set it to now, to ensure we don't repeat sync
-                                            schedule.LastUpdate = DateTime.UtcNow;
+                                            log.Debug(schedule.SessionName + " sync succeeded.");
+                                            // Should only be 1 valid Session ID. ScheduleRecordingResult could be null if just updating the session name.
+                                            if (result != null)
+                                            {
+                                                schedule.ScheduledSessionId = result.SessionIDs.FirstOrDefault();
+                                                if (schedule.PresenterUsername != null)
+                                                {
+                                                   bool Username = CheckUsernameAndUpdateOwner(userManagementWrapper, sessionManagementWrapper, schedule.PresenterUsername, schedule.ScheduledSessionId.Value);
+                                                    if (Username == true)
+                                                    { log.Debug(schedule.SessionName + " has had owner updated to " + schedule.PresenterUsername); }
+                                                    else
+                                                    { schedule.ErrorResponse = "Owner update failed. Username:" + schedule.PresenterUsername + "could not be located"; }
+                                                }
+                                            }
+                                            schedule.NumberOfAttempts = 0;
+                                            
+
+                                            if (schedule.LastUpdate > DateTime.UtcNow)
+                                            {
+                                                // In the rare case that the LastUpdateTime was in the future, set it to now, to ensure we don't repeat sync
+                                                schedule.LastUpdate = DateTime.UtcNow;
+                                            }
                                         }
-                                    }
-                                    else
-                                    {
-                                        schedule.ErrorResponse = this.xmlScheduledRecordingHelper.SerializeXMLToString(result);
-                                        schedule.NumberOfAttempts++;
-                                        if (schedule.NumberOfAttempts >= MAX_ATTEMPTS)
+                                        else
                                         {
-                                            log.Error(schedule.SessionName + " failed to sync.");
+                                            schedule.ErrorResponse = this.xmlScheduledRecordingHelper.SerializeXMLToString(result);
+                                            schedule.NumberOfAttempts++;
+                                            if (schedule.NumberOfAttempts >= MAX_ATTEMPTS)
+                                            {
+                                                log.Error(schedule.SessionName + " failed to sync.");
+                                            }
                                         }
-                                    }
                                 }
 
                                 // Cancel Schedule has been requested and not succeeded

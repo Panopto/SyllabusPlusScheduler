@@ -89,6 +89,20 @@ namespace SyllabusPlusSchedulerService.PublicApiWrapper
             this.sessionManagement.UpdateSessionName(this.authentication, sessionId, name);
         }
 
+        public bool UpdateSessionOwner (Guid sessionId, string username)
+        {
+            try
+            {
+                this.sessionManagement.UpdateSessionOwner(this.authentication, new Guid[] { sessionId }, username);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
         /// <summary>
         /// Clean up object
         /// </summary>
