@@ -108,17 +108,17 @@ namespace SyllabusPlusSchedulerService
         private bool CheckUsernameAndUpdateOwner(UserManagementWrapper userManagementWrapper, SessionManagementWrapper sessionManagementWrapper ,string Username, Guid sessionid)
         {
           
-               Guid userid =  userManagementWrapper.GetUserIdByName(Username);
-            log.Warn($"{userid}");
-            if (userid == null)
+               Guid? userid =  userManagementWrapper.GetUserIdByName(Username);
+            if (userid != null)
+            {
+                return sessionManagementWrapper.UpdateSessionOwner(sessionid, Username);
+
+            }
+            else
             {
                 log.Error(String.Format("Can't find user named {0} in the Panopto database.", Username));
                 log.Warn(String.Format("Recording will be scheduled with the service account as the owner: {0}.", this.configSettings.PanoptoUserName));
                 return false;
-            }
-            else
-            {
-                return sessionManagementWrapper.UpdateSessionOwner(sessionid, Username);
             }
         }
 
@@ -217,18 +217,42 @@ namespace SyllabusPlusSchedulerService
                                                 if (scheduledSession.Duration != Convert.ToDouble(schedule.Duration)*60)
                                                 {
                                                     log.Debug("Updating the scheduled duration.");
-                                                    log.Debug($"Old duration in seconds {scheduledSession.Duration}, New duration in seconds {Convert.ToDouble(schedule.Duration)}*60");
+                                                    log.Debug($"Old duration in seconds {scheduledSession.Duration}, New duration in seconds {Convert.ToDouble(schedule.Duration) * 60}");
                                                     result = remoteRecorderManagementWrapper.UpdateRecordingTime(schedule);
                                                 }
-                                                if (schedule.PresenterUsername != null)
+
+                                                if (schedule.PresenterUsername != userManagementWrapper.GetUserNameByID(scheduledSession.CreatorId))
                                                 {
                                                     log.Debug("Updating the session owner.");
-                                                    bool Username =   CheckUsernameAndUpdateOwner(userManagementWrapper, sessionManagementWrapper, schedule.PresenterUsername, (Guid)schedule.ScheduledSessionId);
-                                                    if (Username == true)
-                                                    { log.Debug(schedule.SessionName + " has had owner updated to " + schedule.PresenterUsername); }
+                                                    if (schedule.PresenterUsername == null)
+
+                                                    {
+                                                        bool Username =   CheckUsernameAndUpdateOwner(userManagementWrapper, sessionManagementWrapper, this.configSettings.PanoptoUserName, (Guid)schedule.ScheduledSessionId);
+                                                        if (Username == true)
+                                                        { log.Debug(schedule.SessionName + " has had owner updated to " + this.configSettings.PanoptoUserName); }
+                                                        else
+                                                        { schedule.ErrorResponse = "Owner update failed. Username:" + schedule.PresenterUsername + "could not be located"; }
+                                                    }
+
                                                     else
-                                                    { schedule.ErrorResponse = "Owner update failed. Username:" + schedule.PresenterUsername + "could not be located"; }
+                                                    {
+                                                        bool Username =   CheckUsernameAndUpdateOwner(userManagementWrapper, sessionManagementWrapper, schedule.PresenterUsername, (Guid)schedule.ScheduledSessionId);
+                                                        if (Username == true)
+                                                        { log.Debug(schedule.SessionName + " has had owner updated to " + schedule.PresenterUsername); }
+                                                        else
+                                                        { schedule.ErrorResponse = "Owner update failed. Username:" + schedule.PresenterUsername + "could not be located"; }
+                                                    }
                                                 }
+
+                                               
+                                                if (schedule.FolderId != scheduledSession.FolderId)
+                                                    {
+                                                      log.Debug($"Updating the folder session {schedule.SessionName} is scheduled to by deleting existing schedule and re-scheduling. Old folder {scheduledSession.FolderId}, New Folder {schedule.FolderId}");
+                                                sessionManagementWrapper.DeleteSessions((Guid)schedule.ScheduledSessionId);
+                                                // Reset the ScheduledSessionId in the DB just in case rescheduling the session fails the first time.
+                                                schedule.ScheduledSessionId = null;
+                                                result = VerifyFolderAndScheduleRecording(sessionManagementWrapper, schedule, remoteRecorderManagementWrapper);
+                                                    }
                                             }
                                         }
                                     }
@@ -262,6 +286,7 @@ namespace SyllabusPlusSchedulerService
                                                     else
                                                     { schedule.ErrorResponse = "Owner update failed. Username:" + schedule.PresenterUsername + "could not be located"; }
                                                 }
+
                                             }
                                             schedule.NumberOfAttempts = 0;
                                             

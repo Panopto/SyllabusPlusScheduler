@@ -55,9 +55,19 @@ namespace SyllabusPlusSchedulerService.PublicApiWrapper
         /// Gets a user ID by username
         /// </summary>
         /// <param name="username">UserName</param>
-        public Guid GetUserIdByName(string username)
+        public Guid? GetUserIdByName(string username)
         {
-            return this.userManagement.GetUserByKey(this.authentication,username).UserId;
+            try
+            {
+                return this.userManagement.GetUserByKey(this.authentication, username).UserId;
+            }
+            catch (Exception ex)
+            { return null; }
+        }
+
+         public string GetUserNameByID(Guid UserId)
+        {
+            return this.userManagement.GetUsers(this.authentication,new Guid [] {UserId}).FirstOrDefault().UserKey;
         }
 
         /// <summary>
