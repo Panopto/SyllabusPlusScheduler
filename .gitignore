@@ -22,7 +22,6 @@
 /SyllabusPlusSchedulerService/Service References/UserManagement/SyllabusPlusSchedulerService.UserManagement.ListGroupsResponse.datasource
 /SyllabusPlusSchedulerService/Service References/UserManagement/SyllabusPlusSchedulerService.UserManagement.Group.datasource
 /SyllabusPlusSchedulerService/Service References/UserManagement/Reference.svcmap
-/SyllabusPlusSchedulerService/Service References/UserManagement/Reference.cs
 /SyllabusPlusSchedulerService/Service References/UserManagement/configuration91.svcinfo
 /SyllabusPlusSchedulerService/Service References/UserManagement/configuration.svcinfo
 /SyllabusPlusSchedulerService/obj/Release/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
@@ -84,3 +83,6 @@
 /SyllabusPlusSchedulerService/obj/Debug/TempPE/Service References.RemoteRecorderManagement.Reference.cs.dll
 /.vs/slnx.sqlite-journal
 /.vs/SyllabusPlusScheduler-Dev2/v15/.suo
+/.vs/SyllabusPlusScheduler-Dev3/v15/.suo
+/SyllabusPlusSchedulerService/obj/Release/DesignTimeResolveAssemblyReferences.cache
+/SyllabusPlusSchedulerService/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
