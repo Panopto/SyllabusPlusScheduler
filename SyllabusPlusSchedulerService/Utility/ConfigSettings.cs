@@ -35,6 +35,11 @@ namespace SyllabusPlusSchedulerService.Utility
         public Guid PanoptoDefaultFolder { get; private set; }
 
         /// <summary>
+        /// Switch to override the order in which sync runs from LastUpdate (which is default) to ID
+        /// </summary>
+        public bool OrderSyncById { get; private set; }
+
+        /// <summary>
         /// ConfigSettings constructor that gets settings from the config
         /// Note: Exceptions are not handled
         /// </summary>
@@ -45,6 +50,7 @@ namespace SyllabusPlusSchedulerService.Utility
             this.PanoptoPassword = ConfigurationManager.AppSettings["PanoptoPassword"];
             this.PopulateDefaultFolder();
             this.PopulateSyncInterval();
+            this.PopulateSyncOrder();
 
         }
 
@@ -78,6 +84,24 @@ namespace SyllabusPlusSchedulerService.Utility
             else
             {
                 this.PanoptoDefaultFolder = Guid.Empty;
+            }
+        }
+
+
+        /// <summary>
+        /// Attempts to populate Sync Order from App.Config. Defaults to false (which means LastUpdate)
+        /// </summary>
+        private void PopulateSyncOrder()
+        {
+            bool syncOrder;
+            if (bool.TryParse(ConfigurationManager.AppSettings["OrderSyncById"], out syncOrder))
+            {
+                this.OrderSyncById = syncOrder;
+            }
+            else
+            {
+                // Default to 60
+                this.OrderSyncById = false;
             }
         }
     }

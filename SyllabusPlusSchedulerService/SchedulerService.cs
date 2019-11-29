@@ -136,13 +136,26 @@ namespace SyllabusPlusSchedulerService
                 {
                     using (SyllabusPlusDBContext db = new SyllabusPlusDBContext())
                     {
-                        schedule =
-                            db.SchedulesTable.Select(s => s)
-                                .Where(s => (s.NumberOfAttempts < MAX_ATTEMPTS
-                                            && (!s.LastPanoptoSync.HasValue
-                                                || !s.PanoptoSyncSuccess.HasValue || s.PanoptoSyncSuccess == false)
-                                                && s.LastUpdate > s.LastPanoptoSync.Value))
-                              .OrderBy(s => s.LastUpdate).FirstOrDefault();
+                        if (this.configSettings.OrderSyncById == true)
+                        {
+                            schedule =
+                                db.SchedulesTable.Select(s => s)
+                                    .Where(s => (s.NumberOfAttempts < MAX_ATTEMPTS
+                                                && (!s.LastPanoptoSync.HasValue
+                                                    || !s.PanoptoSyncSuccess.HasValue || s.PanoptoSyncSuccess == false)
+                                                    && s.LastUpdate > s.LastPanoptoSync.Value))
+                                  .OrderBy(s => s.ID).FirstOrDefault();
+                        }
+                        else
+                        {
+                            schedule =
+                                db.SchedulesTable.Select(s => s)
+                                    .Where(s => (s.NumberOfAttempts < MAX_ATTEMPTS
+                                                && (!s.LastPanoptoSync.HasValue
+                                                    || !s.PanoptoSyncSuccess.HasValue || s.PanoptoSyncSuccess == false)
+                                                    && s.LastUpdate > s.LastPanoptoSync.Value))
+                                  .OrderBy(s => s.LastUpdate).FirstOrDefault();
+                        }
 
                         try
                         {
