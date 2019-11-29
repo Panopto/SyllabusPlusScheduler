@@ -8,6 +8,7 @@ The Panopto Syllabus Plus Scheduler service queries a table of scheduled events 
 * When the service finds an existing scheduled event row that needs to be updated, it calls the API to update the start time, duration, or session name. Note that currently any changes to change the presenter's username, change the folder, or any other information will not be sync'ed after the recording has been scheduled. For now, please make these changes manually through the Panopto web application.
 * When the service finds an existing scheduled event row that has an updated remote recorder ID, the original session will be deleted and a new session will be scheduled for the updated remote recorder.
 * When the service finds an existing scheduled event row that needs to be cancelled (based on if the cancel schedule flag is set), the service will cancel the scheduled recording in Panopto.
+* The service uses the lastUpdate column (oldest date first) to determine in which order items are synced. This can be overridden with optional config change OrderSyncById. Setting to true will use the ID (PK auto increment) to determine order of sync, starting with the lowest value first.  
 
 ## How do I set this up?
 1. Run DB Script\SyllabusPlusDBScript.sql to create the Schedules table in your database.
@@ -36,6 +37,7 @@ You can change configuration after you have installed the service by directly ed
     <add key="PanoptoPassword" value="<Panopto Password>"/>
     <add key="SyncInterval" value="<Sync Interval in minutes>"/><!--In minutes-->
     <add key="PanoptoDefaultFolder" value="<Panopto Folder ID>"/>
+    <add key="OrderSyncById" value="false" />
 </appSettings>
 <connectionStrings>
     <add name="SyllabusPlusDBContext" connectionString="Data Source=<Location of database server>;Initial Catalog=<Name of database>;Integrated Security=True" providerName="System.Data.SqlClient"/>
