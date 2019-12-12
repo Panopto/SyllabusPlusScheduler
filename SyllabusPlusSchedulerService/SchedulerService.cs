@@ -136,7 +136,7 @@ namespace SyllabusPlusSchedulerService
                 {
                     using (SyllabusPlusDBContext db = new SyllabusPlusDBContext())
                     {
-                        if (this.configSettings.OrderSyncById == true)
+                        if (this.configSettings.OrderSyncById)
                         {
                             schedule =
                                 db.SchedulesTable.Select(s => s)
