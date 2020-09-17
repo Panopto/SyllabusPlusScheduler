@@ -61,7 +61,7 @@ namespace SyllabusPlusSchedulerService.PublicApiWrapper
             {
                 return this.userManagement.GetUserByKey(this.authentication, username).UserId;
             }
-            catch (Exception ex)
+            catch (Exception)
             { return null; }
         }
 
