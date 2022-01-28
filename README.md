@@ -61,7 +61,7 @@ You can change configuration after you have installed the service by directly ed
 |scheduledSessionID|uniqueidentifier|Null until the service populates the column with the GUID for the scheduled recording during a sync.|
 |lastUpdate|datetime|The last time the row was updated in the database. This must be in UTC.|
 |lastPanoptoSync|datetime|The last time the service sync'ed this row. This must be in UTC.|
-|panoptoSyncSuccess|bit|Null until the service attempts a sync. If the sync fails for the row, this bit is set to 0. If the sync succeeds, this bit is set to 1.|
+|panoptoSyncSuccess|bit| This bit should be set to 0. If the sync succeeds, this bit is set to 1.|
 |numberOfAttempts|int|Counter for the number of times the service attempted to sync this row but failed. Once the max number of attempts is reached, the service will no longer attempt to sync this row. Currently the max number of attempts is set to 3.|
 |errorResponse|nvarchar(max)|If the service fails to schedule the row (say there is a web request failure or a conflicting recording), the error message is stored in this column.|
 
@@ -76,11 +76,11 @@ Here are a few helpful troubleshooting tips:
     * You may also want to use a shorter sync interval (2 mins or 5 mins) when testing the initial service configuration.
 * Here is a SQL snippet that you can use to insert some sample data. Be sure to replace the variables (@folderID, @rrID, @date1/2/3) with actual values.
 ```
-insert into Schedules (sessionName,folderID,primaryRemoteRecorderID,startTime,duration,webcast,lastUpdate,numberOfAttempts) values ('Test session 1',@folderID,@rrID,@date1,60,0,GETUTCDATE(),0);
+insert into Schedules (sessionName,folderID,primaryRemoteRecorderID,startTime,duration,webcast,lastUpdate,numberOfAttempts,panoptoSyncSuccess) values ('Test session 1',@folderID,@rrID,@date1,60,0,GETUTCDATE(),0,0);
 
-insert into Schedules (sessionName,folderID,primaryRemoteRecorderID,startTime,duration,webcast,lastUpdate,numberOfAttempts) values ('Test session 2',@folderID,@rrID,@date2,60,0,GETUTCDATE(),0);
+insert into Schedules (sessionName,folderID,primaryRemoteRecorderID,startTime,duration,webcast,lastUpdate,numberOfAttempts,panoptoSyncSuccess) values ('Test session 2',@folderID,@rrID,@date2,60,0,GETUTCDATE(),0,0);
 
-insert into Schedules (sessionName,folderID,primaryRemoteRecorderID,startTime,duration,webcast,lastUpdate,numberOfAttempts) values ('Test session 3',@folderID,@rrID,@date3,60,0,GETUTCDATE(),0);
+insert into Schedules (sessionName,folderID,primaryRemoteRecorderID,startTime,duration,webcast,lastUpdate,numberOfAttempts,panoptoSyncSuccess) values ('Test session 3',@folderID,@rrID,@date3,60,0,GETUTCDATE(),0,0);
 ```
 * If any errors occur or scheduling conflicts are encountered while scheduling recordings, the Schedules table includes an errorMessage column containing XML with the corresponding error message.
 * In addition to the error response being stored in the Schedules table, the service also logs sync data to the event log. This is useful when troubleshooting the service. You can pull this event log up by opening the Windows Event Viewer app and navigating to Windows Logs > Application.
